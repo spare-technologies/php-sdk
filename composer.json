@@ -1,0 +1,22 @@
+{
+    "name": "sdk/php-sdk",
+    "description": "Composer php sdk",
+    "type": "library",
+    "authors": [
+        {
+            "name": "bty",
+            "email": "ybentaher@tryspare.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "php-http/curl-client": "^2.0@dev",
+        "react/promise": "^2.8"
+    },
+    "autoload": {
+        "psr-0": {
+            "Payment": "src/"
+        }
+    }
+}
