@@ -4,14 +4,13 @@
 namespace Payment\Models\Payment\Domestic;
 
 
-use http\Url;
 
 class SpDomesticPayment
 {
     public int $amount;
     public string $description;
-    public Url $successUrl;
-    public Url $failUrl;
+    public string $successUrl;
+    public string $failUrl;
 
     /**
      * @return int

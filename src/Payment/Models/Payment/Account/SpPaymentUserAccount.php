@@ -19,7 +19,7 @@ class SpPaymentUserAccount
     /**
      * @param SpUserAccount $account
      */
-    public function setAccount(SpUserAccount $account): void
+    public function setAccount(SpUserAccount $account)
     {
         $this->account = $account;
     }

@@ -12,19 +12,19 @@ interface ISpPaymentClient
      * @param SpDomesticPayment $payment
      * @return mixed
      */
-    function CreateDomesticPayment(SpDomesticPayment $payment): Promise;
+    function CreateDomesticPayment(SpDomesticPayment $payment);
 
     /**
      * @param string $id
      * @return mixed
      */
-    function GetDomesticPayment(string $id): Promise;
+    function GetDomesticPayment(string $id);
 
     /**
      * @param int $start
      * @param int $perPage
      * @return mixed
      */
-    function ListDomesticPayment(int $start = 0, int $perPage = 100): Promise;
+    function ListDomesticPayment(int $start, int $perPage);
 
 }

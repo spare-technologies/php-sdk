@@ -11,6 +11,7 @@ class SpUserAccount
     public string $name;
     public string $picture;
 
+
     /**
      * @return string
      */
