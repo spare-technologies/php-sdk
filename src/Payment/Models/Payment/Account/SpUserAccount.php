@@ -11,6 +11,13 @@ class SpUserAccount
     public string $name;
     public string $picture;
 
+    function __construct(string $Id, string $Identifier, string $Name, string $Picture) {
+        $this->id = $Id;
+        $this->identifier = $Identifier;
+        $this->name = $Name;
+        $this->picture = $Picture;
+
+    }
 
     /**
      * @return string
@@ -75,4 +82,5 @@ class SpUserAccount
     {
         $this->picture = $picture;
     }
+
 }

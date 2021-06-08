@@ -9,6 +9,11 @@ class SpUserPaymentBankAccount
     public string $schema;
     public string $identification;
 
+    function __construct(string $Schema, string $Identification) {
+        $this->schema = $Schema;
+        $this->identification = $Identification;
+    }
+
     /**
      * @return string
      */

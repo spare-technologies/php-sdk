@@ -7,8 +7,14 @@ namespace Payment\Models\Response;
 class SpareSdkResponse
 {
     public string $error;
-    public T $data;
-    public TV $meta;
+    public  mixed $data;
+    public  mixed $meta;
+
+    function __construct(string $Error, mixed $Data, mixed $Meta) {
+        $this->error = $Error;
+        $this->data = $Data;
+        $this->meta = $Meta;
+    }
 
     /**
      * @return string
@@ -27,35 +33,19 @@ class SpareSdkResponse
     }
 
     /**
-     * @return T
+     * @return mixed
      */
-    public function getData(): T
+    public function getData()
     {
         return $this->data;
     }
 
     /**
-     * @param T $data
+     * @return mixed
      */
-    public function setData(T $data): void
-    {
-        $this->data = $data;
-    }
-
-    /**
-     * @return TV
-     */
-    public function getMeta(): TV
+    public function getMeta()
     {
         return $this->meta;
-    }
-
-    /**
-     * @param TV $meta
-     */
-    public function setMeta(TV $meta): void
-    {
-        $this->meta = $meta;
     }
 
 }
