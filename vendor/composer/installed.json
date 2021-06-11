@@ -1023,12 +1023,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/phpstan/phpdoc-parser.git",
-            "reference": "dff3ee149bc83e1166278616a8f81e01324e3529"
+            "reference": "ea0b17460ec38e20d7eb64e7ec49b5d44af5d28c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/dff3ee149bc83e1166278616a8f81e01324e3529",
-            "reference": "dff3ee149bc83e1166278616a8f81e01324e3529",
+            "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/ea0b17460ec38e20d7eb64e7ec49b5d44af5d28c",
+            "reference": "ea0b17460ec38e20d7eb64e7ec49b5d44af5d28c",
             "shasum": ""
         },
         "require": {
@@ -1037,12 +1037,12 @@
         "require-dev": {
             "php-parallel-lint/php-parallel-lint": "^1.2",
             "phpstan/extension-installer": "^1.0",
-            "phpstan/phpstan": "^0.12.60",
+            "phpstan/phpstan": "^0.12.87",
             "phpstan/phpstan-strict-rules": "^0.12.5",
             "phpunit/phpunit": "^9.5",
             "symfony/process": "^5.2"
         },
-        "time": "2021-05-16T13:07:13+00:00",
+        "time": "2021-06-11T13:24:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

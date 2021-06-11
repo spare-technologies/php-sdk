@@ -7,9 +7,9 @@ namespace Payment\Client;
 
 class SpPaymentClientOptions
 {
-    public  $baseUrl;
-    public  $appId;
-    public  $appKey;
+    public  string $baseUrl;
+    public  string $appId;
+    public  string $appKey;
 
     function __construct(string $BaseUrl, string $appId, string $appKey) {
         $this->baseUrl = $BaseUrl;

@@ -10,17 +10,17 @@ require_once 'vendor/autoload.php';
 class SpPaymentClient implements ISpPaymentClient
 {
 
-    public $clientOptions;
+    public SpPaymentClientOptions $clientOptions;
 
-    function __construct( $ClientOptions) {
+    function __construct(SpPaymentClientOptions $ClientOptions) {
         $this->clientOptions = $ClientOptions;
     }
 
 
-    public function CreateDomesticPayment( $payment)
+    public function CreateDomesticPayment(SpDomesticPayment $payment)
     {
         $client = new \GuzzleHttp\Client();
-        $request = new \GuzzleHttp\Psr7\Request('POST', "{$this->clientOptions->baseUrl}/api/v1.0/payments/domestic/Create" ,
+        $request = new \GuzzleHttp\Psr7\Request('POST', $this->GetUrl(SpEndPoints::$CreateDomesticPayment),
             $this->GetHeaders(), json_encode($payment));
         $promise = $client->sendAsync($request);
         $promise->wait();
@@ -29,7 +29,7 @@ class SpPaymentClient implements ISpPaymentClient
     public function GetDomesticPayment(string $id)
     {
         $client = new \GuzzleHttp\Client();
-        $request = new \GuzzleHttp\Psr7\Request('GET', "{$this->clientOptions->baseUrl}/api/v1.0/payments/domestic/Get?id=$id" , $this->GetHeaders());
+        $request = new \GuzzleHttp\Psr7\Request('GET', "{$this->GetUrl(SpEndPoints::$GetDomesticPayment)}?id=$id", $this->GetHeaders());
         $promise = $client->sendAsync($request);
         $promise->wait();
         return $promise;
@@ -37,10 +37,14 @@ class SpPaymentClient implements ISpPaymentClient
     public function ListDomesticPayment(int $start, int $perPage)
     {
         $client = new \GuzzleHttp\Client();
-        $request = new \GuzzleHttp\Psr7\Request('GET', "{$this->clientOptions->baseUrl}/api/v1.0/payments/domestic/List?start=$start&perPage=$perPage" , $this->GetHeaders());
+        $request = new \GuzzleHttp\Psr7\Request('GET', "{$this->GetUrl(SpEndPoints::$ListDomesticPayment)}?start=$start&perPage=$perPage" , $this->GetHeaders());
         $promise = $client->sendAsync($request);
         $promise->wait();
         return $promise;
+    }
+
+    private function GetUrl($endpoint): string {
+        return "{$this->clientOptions->baseUrl}{$endpoint}";
     }
 
     private function GetHeaders(): array {

@@ -5,6 +5,7 @@ namespace Payment\Client;
 
 
 use Http\Promise\Promise;
+use Payment\Models\Payment\Domestic\SpDomesticPayment;
 
 interface ISpPaymentClient
 {

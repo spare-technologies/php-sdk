@@ -7,10 +7,10 @@ namespace Payment\Models\Payment\Domestic;
 
 class SpDomesticPayment
 {
-    public  $amount;
-    public  $description;
-    public  $successUrl;
-    public  $failUrl;
+    public  int $amount;
+    public  string $description;
+    public  string $successUrl;
+    public  string $failUrl;
 
     function __construct(int $Amount, string $Description, string $SuccessUrl, string $FailUrl)
     {

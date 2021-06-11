@@ -14,7 +14,7 @@ $client = new \Payment\Client\SpPaymentClient(
 }); */
 
 /* $rep = $client->CreateDomesticPayment(new \Payment\Models\Payment\Domestic\SpDomesticPayment(
-    50, 'Test payment', 'https://surl.com', 'https://surl.com'
+    55, 'Test payment', 'https://surl.com', 'https://surl.com'
 ))->then(function ($res) {
     echo $res->getBody();
 }); */
