@@ -10,11 +10,6 @@ class SpareSdkResponse
     public  mixed $data;
     public  mixed $meta;
 
-    function __construct(string $Error, mixed $Data, mixed $Meta) {
-        $this->error = $Error;
-        $this->data = $Data;
-        $this->meta = $Meta;
-    }
 
     /**
      * @return string
@@ -35,7 +30,7 @@ class SpareSdkResponse
     /**
      * @return mixed
      */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
@@ -43,7 +38,7 @@ class SpareSdkResponse
     /**
      * @return mixed
      */
-    public function getMeta()
+    public function getMeta(): mixed
     {
         return $this->meta;
     }
