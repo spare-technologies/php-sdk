@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $client = new \Payment\Client\SpPaymentClient(
-    new \Payment\Client\SpPaymentClientOptions('https://dev.tryspare.com',
+    new \Payment\Client\SpPaymentClientOptions('https://devpayment.tryspare.com',
         'mHzLLIyaKyClbr5WPP8v3mqu1PLHfRqEJfaNkqXt/Og=',
         'deVF3jjcOggbtFJWiRN0M246lBpADD5MVvaowKJlFfg=')
 );
