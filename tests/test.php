@@ -6,11 +6,11 @@ $client = new \Payment\Client\SpPaymentClient(
         'mHzLLIyaKyClbr5WPP8v3mqu1PLHfRqEJfaNkqXt/Og=',
         'deVF3jjcOggbtFJWiRN0M246lBpADD5MVvaowKJlFfg=')
 );
- try {
-    $rep = $client->GetDomesticPayment('05815914-83ca-4b0b-9cf2-13f7f353571d');
+/* try {
+    $rep = $client->GetDomesticPayment('6383ee82-48f4-4e4f-b254-634467789c94');
     print_r($rep);
 } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-}
+} */
 
 
 /* try {
@@ -20,10 +20,10 @@ $client = new \Payment\Client\SpPaymentClient(
 } */
 
 
-/* try {
+ try {
     $rep = $client->CreateDomesticPayment(new \Payment\Models\Payment\Domestic\SpDomesticPayment(
-        50, 'Test payment', 'https://surl.com', 'https://surl.com'
+        50, 'Test payment'
     ));
     print_r($rep);
 } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-} */
+}
