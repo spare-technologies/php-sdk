@@ -34,7 +34,7 @@ class XmlFileLoader extends FileLoader
     /**
      * {@inheritdoc}
      */
-    public function loadClassMetadata(ClassMetadataInterface $classMetadata)
+    public function loadClassMetadata(ClassMetadataInterface $classMetadata): bool
     {
         if (null === $this->classes) {
             $this->classes = $this->getClassesFromXml();
@@ -117,9 +117,9 @@ class XmlFileLoader extends FileLoader
     /**
      * Return the names of the classes mapped in this file.
      *
-     * @return string[] The classes names
+     * @return string[]
      */
-    public function getMappedClasses()
+    public function getMappedClasses(): array
     {
         if (null === $this->classes) {
             $this->classes = $this->getClassesFromXml();

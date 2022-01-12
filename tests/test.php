@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
+use Helpers\Crypto\SpCrypto;
 
 $client = new \Payment\Client\SpPaymentClient(
     new \Payment\Client\SpPaymentClientOptions('https://devpayment.tryspare.com',
@@ -23,7 +24,7 @@ $client = new \Payment\Client\SpPaymentClient(
  try {
     $rep = $client->CreateDomesticPayment(new \Payment\Models\Payment\Domestic\SpDomesticPayment(
         50, 'Test payment'
-    ));
+    ), 'dhfjhfjshfjzhjfhzjhfjzhjfzf');
     print_r($rep);
 } catch (\GuzzleHttp\Exception\GuzzleException $e) {
 }

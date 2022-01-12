@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\Serializer\Normalizer;
 
+use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 
@@ -38,6 +39,11 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
     public function __construct(array $defaultContext = [])
     {
+        $this->setDefaultContext($defaultContext);
+    }
+
+    public function setDefaultContext(array $defaultContext): void
+    {
         $this->defaultContext = array_merge($this->defaultContext, $defaultContext);
     }
 
@@ -45,10 +51,8 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
      * {@inheritdoc}
      *
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
-    public function normalize($object, string $format = null, array $context = [])
+    public function normalize(mixed $object, string $format = null, array $context = []): string
     {
         if (!$object instanceof \DateTimeInterface) {
             throw new InvalidArgumentException('The object must implement the "\DateTimeInterface".');
@@ -68,7 +72,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, string $format = null)
+    public function supportsNormalization(mixed $data, string $format = null): bool
     {
         return $data instanceof \DateTimeInterface;
     }
@@ -77,16 +81,14 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
      * {@inheritdoc}
      *
      * @throws NotNormalizableValueException
-     *
-     * @return \DateTimeInterface
      */
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): \DateTimeInterface
     {
         $dateTimeFormat = $context[self::FORMAT_KEY] ?? null;
         $timezone = $this->getTimezone($context);
 
         if (null === $data || (\is_string($data) && '' === trim($data))) {
-            throw new NotNormalizableValueException('The data is either an empty string or null, you should pass a string that can be parsed with the passed format or a valid DateTime string.');
+            throw NotNormalizableValueException::createForUnexpectedDataType('The data is either an empty string or null, you should pass a string that can be parsed with the passed format or a valid DateTime string.', $data, [Type::BUILTIN_TYPE_STRING], $context['deserialization_path'] ?? null, true);
         }
 
         if (null !== $dateTimeFormat) {
@@ -98,20 +100,20 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
             $dateTimeErrors = \DateTime::class === $type ? \DateTime::getLastErrors() : \DateTimeImmutable::getLastErrors();
 
-            throw new NotNormalizableValueException(sprintf('Parsing datetime string "%s" using format "%s" resulted in %d errors: ', $data, $dateTimeFormat, $dateTimeErrors['error_count'])."\n".implode("\n", $this->formatDateTimeErrors($dateTimeErrors['errors'])));
+            throw NotNormalizableValueException::createForUnexpectedDataType(sprintf('Parsing datetime string "%s" using format "%s" resulted in %d errors: ', $data, $dateTimeFormat, $dateTimeErrors['error_count'])."\n".implode("\n", $this->formatDateTimeErrors($dateTimeErrors['errors'])), $data, [Type::BUILTIN_TYPE_STRING], $context['deserialization_path'] ?? null, true);
         }
 
         try {
             return \DateTime::class === $type ? new \DateTime($data, $timezone) : new \DateTimeImmutable($data, $timezone);
         } catch (\Exception $e) {
-            throw new NotNormalizableValueException($e->getMessage(), $e->getCode(), $e);
+            throw NotNormalizableValueException::createForUnexpectedDataType($e->getMessage(), $data, [Type::BUILTIN_TYPE_STRING], $context['deserialization_path'] ?? null, false, $e->getCode(), $e);
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, string $type, string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
     {
         return isset(self::SUPPORTED_TYPES[$type]);
     }

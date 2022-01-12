@@ -13,7 +13,7 @@ interface ISpPaymentClient
      * @param SpDomesticPayment $payment
      * @return mixed
      */
-    function CreateDomesticPayment(SpDomesticPayment $payment);
+    function CreateDomesticPayment(SpDomesticPayment $payment, string $signature);
 
     /**
      * @param string $id

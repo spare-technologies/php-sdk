@@ -54,8 +54,8 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
         'zh' => 'Han-Latin',
     ];
 
-    private $defaultLocale;
-    private $symbolsMap = [
+    private ?string $defaultLocale;
+    private \Closure|array $symbolsMap = [
         'en' => ['@' => 'at', '&' => 'and'],
     ];
 
@@ -64,9 +64,9 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
      *
      * @var \Transliterator[]
      */
-    private $transliterators = [];
+    private array $transliterators = [];
 
-    public function __construct(string $defaultLocale = null, array|\Closure|null $symbolsMap = null)
+    public function __construct(string $defaultLocale = null, array|\Closure $symbolsMap = null)
     {
         $this->defaultLocale = $defaultLocale;
         $this->symbolsMap = $symbolsMap ?? $this->symbolsMap;
@@ -83,7 +83,7 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->defaultLocale;
     }
@@ -93,10 +93,10 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
      */
     public function slug(string $string, string $separator = '-', string $locale = null): AbstractUnicodeString
     {
-        $locale = $locale ?? $this->defaultLocale;
+        $locale ??= $this->defaultLocale;
 
         $transliterator = [];
-        if ($locale && ('de' === $locale || 0 === strpos($locale, 'de_'))) {
+        if ($locale && ('de' === $locale || str_starts_with($locale, 'de_'))) {
             // Use the shortcut for German in UnicodeString::ascii() if possible (faster and no requirement on intl)
             $transliterator = ['de-ASCII'];
         } elseif (\function_exists('transliterator_transliterate') && $locale) {

@@ -18,14 +18,12 @@ namespace Symfony\Component\String;
  */
 class LazyString implements \Stringable, \JsonSerializable
 {
-    private $value;
+    private \Closure|string $value;
 
     /**
      * @param callable|array $callback A callable or a [Closure, method] lazy-callable
-     *
-     * @return static
      */
-    public static function fromCallable(callable|array $callback, mixed ...$arguments): self
+    public static function fromCallable(callable|array $callback, mixed ...$arguments): static
     {
         if (\is_array($callback) && !\is_callable($callback) && !(($callback[0] ?? null) instanceof \Closure || 2 < \count($callback))) {
             throw new \TypeError(sprintf('Argument 1 passed to "%s()" must be a callable or a [Closure, method] lazy-callable, "%s" given.', __METHOD__, '['.implode(', ', array_map('get_debug_type', $callback)).']'));
@@ -49,10 +47,7 @@ class LazyString implements \Stringable, \JsonSerializable
         return $lazyString;
     }
 
-    /**
-     * @return static
-     */
-    public static function fromStringable(string|int|float|bool|\Stringable $value): self
+    public static function fromStringable(string|int|float|bool|\Stringable $value): static
     {
         if (\is_object($value)) {
             return static::fromCallable([$value, '__toString']);
@@ -132,7 +127,7 @@ class LazyString implements \Stringable, \JsonSerializable
         } elseif ($callback instanceof \Closure) {
             $r = new \ReflectionFunction($callback);
 
-            if (false !== strpos($r->name, '{closure}') || !$class = $r->getClosureScopeClass()) {
+            if (str_contains($r->name, '{closure}') || !$class = $r->getClosureScopeClass()) {
                 return $r->name;
             }
 

@@ -20,7 +20,8 @@
         "querdos/php-ecdh": "dev-master",
         "simplito/elliptic-php": "1.0.7",
         "symfony/serializer": "6.0.x-dev",
-        "symfony/property-access": "6.0.x-dev"
+        "symfony/property-access": "6.0.x-dev",
+        "paragonie/easy-ecc": "dev-master"
     },
     "config": {
         "preferred-install": "dist",
@@ -30,6 +31,7 @@
     },
     "autoload": {
         "psr-0": {
+            "Helpers": "src/",
             "Payment": "src/"
         }
     }
