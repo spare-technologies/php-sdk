@@ -3,12 +3,10 @@
 
 namespace Payment\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use http\Client;
 use Payment\Models\Payment\Domestic\SpCreateDomesticPaymentResponse;
 use Payment\Models\Payment\Domestic\SpDomesticPayment;
 use Payment\Models\Response\SpareSdkResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -28,20 +26,20 @@ class SpPaymentClient implements ISpPaymentClient
     /**
      * @throws GuzzleException
      */
-    public function CreateDomesticPayment(SpDomesticPayment $payment, string $signature)
+    public function CreateDomesticPayment(SpDomesticPayment $payment, string $signature): SpCreateDomesticPaymentResponse
     {
         $serializer = $this->GetSerializer();
         $client = new \GuzzleHttp\Client();
         $headers = array('app-id' => $this->clientOptions->appId,
                          'x-api-key' => $this->clientOptions->appKey,
-                         'x-signature' => $signature,
-                         'Content-Type' => 'application/json');
+                         'Content-Type' => 'application/json',
+                         'x-signature' => $signature);
         $request = new \GuzzleHttp\Psr7\Request('POST', $this->GetUrl(SpEndPoints::$CreateDomesticPayment),
             $headers, json_encode($payment));
         $response = $serializer->deserialize($client->send($request)->getBody(), SpareSdkResponse::class, 'json');
         return new SpCreateDomesticPaymentResponse(
         $response->getData(),
-        $response->getHeaderLine('x-signature')
+        $request->getHeaderLine('x-signature')
     );
     }
 

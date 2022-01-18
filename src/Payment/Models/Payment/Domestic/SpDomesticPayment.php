@@ -10,10 +10,10 @@ class SpDomesticPayment
     public  int $amount;
     public  string $description;
 
-    function __construct(int $Amount, string $Description)
+    function __construct(int $amount, string $description)
     {
-        $this->amount = $Amount;
-        $this->description = $Description;
+        $this->amount = $amount;
+        $this->description = $description;
     }
 
     /**

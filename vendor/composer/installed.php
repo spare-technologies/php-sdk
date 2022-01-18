@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '613d0b04610dc5e825478a39b25597594f281fa4',
+        'reference' => '7ed4c6b9eac83eda5fa88d10bdc1d7a7833a32da',
         'name' => 'sdk/php-sdk',
         'dev' => true,
     ),
@@ -52,7 +52,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/lexer',
             'aliases' => array(),
-            'reference' => '59bfb3b9be04237be4cd1afea9bbb58794c25ce8',
+            'reference' => '28ba6ff4c9fdd9e5cf251af81fe666e6c9cbc5ef',
             'dev_requirement' => false,
         ),
         'fgrosse/phpasn1' => array(
@@ -116,7 +116,7 @@
             'aliases' => array(
                 0 => '3.x-dev',
             ),
-            'reference' => '190f64b051795d447ec755acbfdb1bff330a6707',
+            'reference' => '3f8750a21a4f3dc12cf8ac2edd9e39f611667a16',
             'dev_requirement' => false,
         ),
         'mashape/unirest-php' => array(
@@ -140,12 +140,12 @@
             'dev_requirement' => false,
         ),
         'paragonie/constant_time_encoding' => array(
-            'pretty_version' => 'v2.4.0',
-            'version' => '2.4.0.0',
+            'pretty_version' => 'v2.5.0',
+            'version' => '2.5.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../paragonie/constant_time_encoding',
             'aliases' => array(),
-            'reference' => 'f34c2b11eb9d2c9318e13540a1dbc2a3afbd939c',
+            'reference' => '9229e15f2e6ba772f0c55dd6986c563b937170a8',
             'dev_requirement' => false,
         ),
         'paragonie/easy-ecc' => array(
@@ -167,7 +167,7 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
-            'reference' => 'cba4096b51f5e588ee60cf7fbf3bf02a13ef0439',
+            'reference' => '91748753a20dd02a227fc10777bb996a7ca527fc',
             'dev_requirement' => false,
         ),
         'paragonie/sodium_compat' => array(
@@ -365,7 +365,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '613d0b04610dc5e825478a39b25597594f281fa4',
+            'reference' => '7ed4c6b9eac83eda5fa88d10bdc1d7a7833a32da',
             'dev_requirement' => false,
         ),
         'simplito/bigint-wrapper-php' => array(
@@ -427,46 +427,38 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-ctype' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => 'v1.24.0',
+            'version' => '1.24.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-ctype',
-            'aliases' => array(
-                0 => '1.23.x-dev',
-            ),
+            'aliases' => array(),
             'reference' => '30885182c981ab175d4d034db0f6f469898070ab',
             'dev_requirement' => false,
         ),
         'symfony/polyfill-intl-grapheme' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => 'v1.24.0',
+            'version' => '1.24.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-intl-grapheme',
-            'aliases' => array(
-                0 => '1.23.x-dev',
-            ),
+            'aliases' => array(),
             'reference' => '81b86b50cf841a64252b439e738e97f4a34e2783',
             'dev_requirement' => false,
         ),
         'symfony/polyfill-intl-normalizer' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => 'v1.24.0',
+            'version' => '1.24.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-intl-normalizer',
-            'aliases' => array(
-                0 => '1.23.x-dev',
-            ),
+            'aliases' => array(),
             'reference' => '8590a5f561694770bdcd3f9b5c69dde6945028e8',
             'dev_requirement' => false,
         ),
         'symfony/polyfill-mbstring' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
+            'pretty_version' => 'v1.24.0',
+            'version' => '1.24.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
-            'aliases' => array(
-                0 => '1.23.x-dev',
-            ),
+            'aliases' => array(),
             'reference' => '0abb51d2f102e00a4eefcf46ba7fec406d245825',
             'dev_requirement' => false,
         ),
@@ -476,7 +468,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/property-access',
             'aliases' => array(),
-            'reference' => '300edcb262ad68ce39ac11a4766ea35a3add1f67',
+            'reference' => '428ffd96c60bf2c13b35182f704b24db6712c897',
             'dev_requirement' => false,
         ),
         'symfony/property-info' => array(
@@ -494,7 +486,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/serializer',
             'aliases' => array(),
-            'reference' => '2282e7512a3264ef964cefce0a4a8037cd1044e5',
+            'reference' => '7e3d20113939de675c1c93f99faf235f9564f660',
             'dev_requirement' => false,
         ),
         'symfony/string' => array(
