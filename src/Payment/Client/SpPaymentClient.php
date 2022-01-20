@@ -36,10 +36,11 @@ class SpPaymentClient implements ISpPaymentClient
                          'x-signature' => $signature);
         $request = new \GuzzleHttp\Psr7\Request('POST', $this->GetUrl(SpEndPoints::$CreateDomesticPayment),
             $headers, json_encode($payment));
-        $response = $serializer->deserialize($client->send($request)->getBody(), SpareSdkResponse::class, 'json');
+        $response = $client->send($request);
+        $responseData = $serializer->deserialize($response->getBody(), SpareSdkResponse::class, 'json');
         return new SpCreateDomesticPaymentResponse(
-        $response->getData(),
-        $request->getHeaderLine('x-signature')
+            $responseData->getData(),
+            $response->getHeaderLine("x-signature")
     );
     }
 

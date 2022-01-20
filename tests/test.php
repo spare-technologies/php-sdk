@@ -26,12 +26,15 @@ Z5l3yXTuHXDTOnFwhHr/Pep8UFOl26Gbjxf0I84MjJFsqNsmUSfjdZTr7Q==
 -----END PUBLIC KEY-----";
 
 $payment = new \Payment\Models\Payment\Domestic\SpDomesticPayment(
-    50, 'Test payment'
+    50.55, 'Test payment'
 );
-print_r(json_encode($payment));
-$rep = $client->CreateDomesticPayment($payment, 'MEUCIQC+zYBb3C/SC/2Ns31iutEViRGJziMMKE0QmXf+08y9kQIgPb09zsEA0rqUfH0rQ8YUwcAdYMBFsjYNn/4RQU4H5lc=');
+
+$rep = $client->CreateDomesticPayment($payment, 'MEUCIEWOyoL/5AmGBaL+MW3WRa63Vbs539IieXzDjUbOr40mAiEAsXbTOEXAGYhDvBUhS1gC7zpEQTGXpjNCYohaQP/QnEA=');
 print_r($rep);
 
 $signature = new \Helpers\Security\DigitalSignature\EccSignatureManager();
-//$ver = $signature->Verify($rep->setPayment(), $rep->getSignature(), $serKey);
-//var_dump($ver);
+$ser = new \Helpers\Security\DigitalSignature\serializer();
+$data = $ser->Serialise($rep->getPayment());
+
+$ver = $signature->Verify($data, $rep->getSignature(), $serKey);
+var_dump($ver);

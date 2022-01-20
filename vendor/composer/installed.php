@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7ed4c6b9eac83eda5fa88d10bdc1d7a7833a32da',
+        'reference' => '2147ec28c4ac759a41353426182c1f5467d11397',
         'name' => 'sdk/php-sdk',
         'dev' => true,
     ),
@@ -365,7 +365,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7ed4c6b9eac83eda5fa88d10bdc1d7a7833a32da',
+            'reference' => '2147ec28c4ac759a41353426182c1f5467d11397',
             'dev_requirement' => false,
         ),
         'simplito/bigint-wrapper-php' => array(
