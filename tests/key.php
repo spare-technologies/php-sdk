@@ -9,6 +9,7 @@ use Helpers\Crypto\SpEcKeyPair;
 use Helpers\Security\DigitalSignature\EccSignatureManager;
 use ParagonIE\EasyECC\EasyECC;
 use EllipticCurve\PublicKey;
+use Helpers\Security\DigitalSignature\serializer;
 
 $prKey = '-----BEGIN PRIVATE KEY-----
 MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgpIs8tj7kiNV6A8+j
@@ -25,8 +26,9 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaSfNI1DLx+FdTrO+zRnWdxxATHfY
  print_r($list->GenerateKeyPair());
 
  $signature = new EccSignatureManager();
-$arr = array('amount' => strval(50.55 + 0), 'description' => 'Test payment');
-$data = json_encode($arr);
+ $serializer = new serializer();
+ $data = $serializer->Serialise(array('amount' => 50.55, 'description' => 'Test payment'));
+
 print_r($data);
 $sig = $signature->Sign($data, $prKey);
 print_r($sig);

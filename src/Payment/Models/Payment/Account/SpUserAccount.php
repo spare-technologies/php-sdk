@@ -7,9 +7,12 @@ namespace Payment\Models\Payment\Account;
 class SpUserAccount
 {
     public string $id;
+    public string $email;
+    public string $gender;
     public string $identifier;
-    public string $name;
+    public string $fullname;
     public string $picture;
+    public string $phone;
 
     function __construct(string $Id, string $Identifier, string $Name, string $Picture) {
         $this->id = $Id;

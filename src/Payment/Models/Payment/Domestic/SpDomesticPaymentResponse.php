@@ -18,10 +18,12 @@ class SpDomesticPaymentResponse
     public SpPaymentUserAccount $debtor;
     public string $link;
     public string $createdAt;
+    public string $amount;
+    public string $description;
 
     function __construct(int $Id, string $Reference, string $Currency,
                          SpUserAccount $Issuer, ?SpPaymentSource $IssuedFrom,
-                         SpPaymentUserAccount $Debtor, string $Link, string $CreatedAt) {
+                         SpPaymentUserAccount $Debtor, string $Link, string $CreatedAt, string $Amount, string $Description) {
         $this->id = $Id;
         $this->reference = $Reference;
         $this->currency = $Currency;
@@ -30,6 +32,8 @@ class SpDomesticPaymentResponse
         $this->debtor = $Debtor;
         $this->link = $Link;
         $this->createdAt = $CreatedAt;
+        $this->amount = $Amount;
+        $this->description = $Description;
     }
 
     /**
@@ -94,6 +98,22 @@ class SpDomesticPaymentResponse
     public function getIssuedFrom(): ?SpPaymentSource
     {
         return $this->issuedFrom;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAmount(): string
+    {
+        return $this->amount;
+    }
+
+     /**
+     * @return string
+     */
+    public function getDEscription(): string
+    {
+        return $this->description;
     }
 
 
