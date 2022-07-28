@@ -6,7 +6,7 @@ namespace Payment\Models\Response;
 
 class SpareSdkResponse
 {
-    public string $error;
+    public  string $error;
     public  mixed $data;
     public  mixed $meta;
 

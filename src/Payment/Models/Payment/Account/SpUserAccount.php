@@ -6,84 +6,45 @@ namespace Payment\Models\Payment\Account;
 
 class SpUserAccount
 {
-    public string $id;
-    public string $email;
-    public string $gender;
-    public string $identifier;
-    public string $fullname;
-    public string $picture;
-    public string $phone;
+    public string $customerReferenceId;
+    public string $customerPaymentLink;
 
-    function __construct(string $Id, string $Identifier, string $Name, string $Picture) {
-        $this->id = $Id;
-        $this->identifier = $Identifier;
-        $this->name = $Name;
-        $this->picture = $Picture;
+    function __construct(string $CustomerReferenceId, string $CustomerPaymentLink) {
+        $this->customerReferenceId = $customerReferenceId;
+        $this->customerPaymentLink = $CustomerPaymentLink;
 
     }
 
     /**
      * @return string
      */
-    public function getId(): string
+    public function getCustomerPaymentLink(): string
     {
-        return $this->id;
+        return $this->customerPaymentLink;
     }
 
     /**
-     * @param string $id
+     * @param string $customerPaymentLink
      */
-    public function setId(string $id): void
+    public function setCustomerPaymentLink(string $customerPaymentLink): string
     {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentifier(): string
-    {
-        return $this->identifier;
-    }
-
-    /**
-     * @param string $identifier
-     */
-    public function setIdentifier(string $identifier): void
-    {
-        $this->identifier = $identifier;
+        return $this->customerPaymentLink;
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    public function getCustomerReferenceId(): string
     {
-        return $this->name;
+        return $this->customerReferenceId;
     }
 
     /**
-     * @param string $name
+     * @param string $customerReferenceId
      */
-    public function setName(string $name): void
+    public function setCustomerReferenceId(string $customerReferenceId): void
     {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPicture(): string
-    {
-        return $this->picture;
-    }
-
-    /**
-     * @param string $picture
-     */
-    public function setPicture(string $picture): void
-    {
-        $this->picture = $picture;
+        $this->customerReferenceId = $customerReferenceId;
     }
 
 }

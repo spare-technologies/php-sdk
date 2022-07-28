@@ -452,15 +452,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
 
         try {
             if (false === $chunks = preg_split($delimiter, $this->string, $limit, $flags)) {
-                $lastError = preg_last_error();
-
-                foreach (get_defined_constants(true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && str_ends_with($k, '_ERROR')) {
-                        throw new RuntimeException('Splitting failed with '.$k.'.');
-                    }
-                }
-
-                throw new RuntimeException('Splitting failed with unknown error code.');
+                throw new RuntimeException('Splitting failed with error: '.preg_last_error_msg());
             }
         } finally {
             restore_error_handler();
@@ -558,7 +550,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
      */
     public function trimPrefix($prefix): static
     {
-        if (\is_array($prefix) || $prefix instanceof \Traversable) {
+        if (\is_array($prefix) || $prefix instanceof \Traversable) { // don't use is_iterable(), it's slow
             foreach ($prefix as $s) {
                 $t = $this->trimPrefix($s);
 
@@ -592,7 +584,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
      */
     public function trimSuffix($suffix): static
     {
-        if (\is_array($suffix) || $suffix instanceof \Traversable) {
+        if (\is_array($suffix) || $suffix instanceof \Traversable) { // don't use is_iterable(), it's slow
             foreach ($suffix as $s) {
                 $t = $this->trimSuffix($s);
 

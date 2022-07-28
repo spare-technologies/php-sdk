@@ -4,7 +4,8 @@ Promise
 A lightweight implementation of
 [CommonJS Promises/A](http://wiki.commonjs.org/wiki/Promises/A) for PHP.
 
-[![CI status](https://github.com/reactphp/promise/workflows/CI/badge.svg?branch=2.x)](https://github.com/reactphp/promise/actions)
+[![CI status](https://github.com/reactphp/promise/actions/workflows/ci.yml/badge.svg?branch=2.x)](https://github.com/reactphp/promise/actions)
+[![installs on Packagist](https://img.shields.io/packagist/dt/react/promise?color=blue&label=installs%20on%20Packagist)](https://packagist.org/packages/react/promise)
 
 Table of Contents
 -----------------
@@ -849,15 +850,14 @@ This project follows [SemVer](https://semver.org/).
 This will install the latest supported version:
 
 ```bash
-$ composer require react/promise:^2.8
+composer require react/promise:^2.9
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
 
 This project aims to run on any platform and thus does not require any PHP
-extensions and supports running on legacy PHP 5.4 through current PHP 7+ and HHVM.
-It's *highly recommended to use PHP 7+* for this project due to its vast
-performance improvements.
+extensions and supports running on legacy PHP 5.4 through current PHP 8+ and HHVM.
+It's *highly recommended to use the latest supported PHP version* for this project.
 
 Credits
 -------

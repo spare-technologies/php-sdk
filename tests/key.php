@@ -23,11 +23,16 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaSfNI1DLx+FdTrO+zRnWdxxATHfY
 -----END PUBLIC KEY-----';
 
  $list = new SpCrypto();
- print_r($list->GenerateKeyPair());
+try {
+    print_r($list->GenerateKeyPair());
+} catch (\ParagonIE\EasyECC\Exception\NotImplementedException $e) {
+} catch (SodiumException $e) {
+}
 
- $signature = new EccSignatureManager();
+$signature = new EccSignatureManager();
  $serializer = new serializer();
- $data = $serializer->Serialise(array('amount' => 50.55, 'description' => 'Test payment'));
+ $cust = json_encode(array('fullname' => 'Jack Smith', 'email' => 'user@test.com', 'phone' => '55789456', 'customerReferenceId' => '56789'));
+ $data = $serializer->Serialise(array('orderId' => '12345', 'amount' => 50, 'description' => 'Test payment', 'customerInformation' => $cust));
 
 print_r($data);
 $sig = $signature->Sign($data, $prKey);

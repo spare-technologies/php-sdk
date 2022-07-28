@@ -6,7 +6,8 @@
 [![License](https://poser.pugx.org/paragonie/easy-ecc/license)](https://packagist.org/packages/paragonie/easy-ecc)
 [![Downloads](https://img.shields.io/packagist/dt/paragonie/easy-ecc.svg)](https://packagist.org/packages/paragonie/easy-ecc)
 
-A usability wrapper for [PHP ECC](https://github.com/phpecc/phpecc).
+A usability wrapper for [PHP ECC](https://github.com/phpecc/phpecc)
+that also further hardens against timing attacks.
 
 ## Installing
 
@@ -72,6 +73,15 @@ use ParagonIE\EasyECC\EasyECC;
 $ecc = new EasyECC('P384');
 ```
 
+#### NIST P521 + SHA512
+
+```php
+<?php
+use ParagonIE\EasyECC\EasyECC;
+
+$ecc = new EasyECC('P521');
+```
+
 ### ECDSA-Specific Features
 
 ```php
@@ -108,6 +118,42 @@ $bob_pk = $alice_sk->getPublicKey();
 
 $alice_to_bob = $ecc->keyExchange($alice_sk, $bob_pk, true);
 $bob_to_alice = $ecc->keyExchange($bob_sk, $alice_pk, false);
+```
+
+### Asymmetric Encryption
+
+We provide an interface that you can implement for the underlying symmetric
+cryptography to suit your needs. This library provides a built-in integration
+for [Defuse's PHP encryption library](https://github.com/defuse/php-encryption).
+
+```php
+<?php
+use ParagonIE\EasyECC\EasyECC;
+use ParagonIE\EasyECC\Integration\Defuse;
+use Mdanter\Ecc\Crypto\Key\{
+    PublicKeyInterface,
+    PrivateKeyInterface
+};
+
+/**
+ * @var EasyECC $ecc
+ * @var PrivateKeyInterface $secretKey
+ * @var PublicKeyInterface $publicKey
+ */
+
+// Let's load the integration (inject your EasyECC instance):
+$defuse = new Defuse($ecc);
+
+// You can seal/unseal messages (anonymous public-key encryption):
+$superSecret = 'This is a secret message';
+$sealed = $defuse->seal($superSecret, $publicKey);
+$opened = $defuse->unseal($sealed, $secretKey);
+
+// Or you can encrypt between two keypairs:
+$otherSecret = $ecc->generatePrivateKey();
+$otherPublic = $otherSecret->getPublicKey();
+$encrypted = $defuse->asymmetricEncrypt($superSecret, $secretKey, $otherPublic);
+$decrypted = $defuse->asymmetricDecrypt($encrypted, $otherSecret, $publicKey);
 ```
 
 ## Support Contracts

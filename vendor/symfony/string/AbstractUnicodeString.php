@@ -234,15 +234,7 @@ abstract class AbstractUnicodeString extends AbstractString
 
         try {
             if (false === $match($regexp.'u', $this->string, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset)) {
-                $lastError = preg_last_error();
-
-                foreach (get_defined_constants(true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && str_ends_with($k, '_ERROR')) {
-                        throw new RuntimeException('Matching failed with '.$k.'.');
-                    }
-                }
-
-                throw new RuntimeException('Matching failed with unknown error code.');
+                throw new RuntimeException('Matching failed with error: '.preg_last_error_msg());
             }
         } finally {
             restore_error_handler();
@@ -478,7 +470,7 @@ abstract class AbstractUnicodeString extends AbstractString
         foreach (explode("\n", $s) as $s) {
             if ($ignoreAnsiDecoration) {
                 $s = preg_replace('/(?:\x1B(?:
-                    \[ [\x30-\x3F]*+ [\x20-\x2F]*+ [0x40-\x7E]
+                    \[ [\x30-\x3F]*+ [\x20-\x2F]*+ [\x40-\x7E]
                     | [P\]X^_] .*? \x1B\\\\
                     | [\x41-\x7E]
                 )|[\p{Cc}\x7F]++)/xu', '', $s);

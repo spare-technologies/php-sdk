@@ -21,12 +21,13 @@
         "simplito/elliptic-php": "1.0.7",
         "symfony/serializer": "6.0.x-dev",
         "symfony/property-access": "6.0.x-dev",
-        "paragonie/easy-ecc": "dev-master"
+        "paragonie/easy-ecc": "dev-master",
+        "phpunit/phpunit": "10.0.x-dev"
     },
     "config": {
         "preferred-install": "dist",
         "platform": {
-            "php": "8.0.7"
+            "php": "8.1.2"
         }
     },
     "autoload": {

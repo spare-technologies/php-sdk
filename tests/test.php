@@ -15,7 +15,7 @@ $client = new \Payment\Client\SpPaymentClient(
 
 
 /* try {
-    $rep = $client->GetDomesticPayment('6383ee82-48f4-4e4f-b254-634467789c94');
+    $rep = $client->GetDomesticPayment('77323989-34f0-48c1-879f-dbb516bb7ea2');
     print_r($rep);
 } catch (\GuzzleHttp\Exception\GuzzleException $e) {
 } */
@@ -27,17 +27,22 @@ $client = new \Payment\Client\SpPaymentClient(
 } catch (\GuzzleHttp\Exception\GuzzleException $e) {
 }  */
 
-$serKey = "-----BEGIN PUBLIC KEY-----
+ $serKey = "-----BEGIN PUBLIC KEY-----
 MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEZergpIl9cU89g/iV97ZLPSyPc7S3
 Z5l3yXTuHXDTOnFwhHr/Pep8UFOl26Gbjxf0I84MjJFsqNsmUSfjdZTr7Q==
 -----END PUBLIC KEY-----";
 
-$payment = new \Payment\Models\Payment\Domestic\SpDomesticPayment(
-    50.55, 'Test payment'
-);
+$payment = new \Payment\Models\Payment\Domestic\SpDomesticPaymentRequest();
+$payment->setAmount(50);
+ $payment->setDescription('Test payment');
+$payment->setOrderId('12345');
+$debtor = new \Payment\Models\Payment\Domestic\SpPaymentDebtorInformation('Jack Smith', 'user@test.com', '55789456', '56789');
+// $payment->setCustomerInformation($debtor);
 
-$rep = $client->CreateDomesticPayment($payment, 'MEUCIFXjpTTDaS7JTin1SjPOHJslYc1uBvQj5e5E0XzFyKn2AiEAu1jg+qxr2Y/6+ft3xMyK8rNuy5SQiyOWSqK87Lsx/0E=');
-print_r($rep);
+print_r(json_encode($payment));
+
+$rep = $client->CreateDomesticPayment($payment, 'MEYCIQCTw+o6EoN6XyNMezN9GkVa4zREJ7gBCj9WofTrMbJS6AIhANM9wRYn6kCZt/sLXKko3tAtuqN8kk3e2im+sCeApkW/');
+print_r($rep->getPayment());
 
 $signature = new \Helpers\Security\DigitalSignature\EccSignatureManager();
 $ser = new \Helpers\Security\DigitalSignature\serializer();
@@ -45,3 +50,4 @@ $data = $ser->Serialise($rep->getPayment());
 
 $ver = $signature->Verify($data, $rep->getSignature(), $serKey);
 var_dump($ver);
+

@@ -3,6 +3,10 @@
 
 namespace Payment\Models\Payment\Account;
 
+use Payment\Models\Payment\Account\SpUserAccount;
+use Payment\Models\Payment\Account\SpUserPaymentBankAccount;
+
+
 class SpPaymentUserAccount
 {
     public SpUserAccount $account;

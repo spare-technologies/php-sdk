@@ -3,25 +3,11 @@
 
 namespace Payment\Models\Payment\Domestic;
 
-use Payment\Models\Payment\Domestic\SpPaymentDebtorInformation;
-
-
-
 class SpDomesticPayment
 {
     public  string $orderId;
-    public  SpPaymentDebtorInformation $customerInformation;
     public  float $amount;
     public  string $description;
-
-    function __construct(string $orderId, SpPaymentDebtorInformation $customerInformation, float $amount, string $description)
-    {
-        $this->orderId = $orderId;
-        $this->customerInformation = $customerInformation;
-        $this->amount = $amount;
-        $this->description = $description;
-    }
-
 
     /**
      * @return string
@@ -32,27 +18,11 @@ class SpDomesticPayment
     }
 
       /**
-     * @return $orderId
+     * @param string $orderId
      */
-    public function setOrderId(string $orderId): string
+    public function setOrderId(string $orderId): void
     {
         $this->orderId = $orderId;
-    }
-
-      /**
-     * @return SpPaymentDebtorInformation
-     */
-    public function getCustomerInformation(): SpPaymentDebtorInformation
-    {
-        return $this->customerInformation;
-    }
-
-      /**
-     * @return $customerInformation
-     */
-    public function setCustomerInformation(SpPaymentDebtorInformation $customerInformation): void
-    {
-        $this->customerInformation = $customerInformation;
     }
 
     /**

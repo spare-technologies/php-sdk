@@ -9,19 +9,17 @@ class SpPaymentDebtorInformation
     public string $fullname;
     public string $email;
     public string $phone;
-    public SpGender $gender;
-    public string $CustomerReferenceId;
+    public string $customerReferenceId;
 
-    function __construct(string $Fullname, string $Email, string $Phone, SpGender $Gender, string $CustomerReferenceId) {
-        $this->id = $Id;
+    function __construct(string $Fullname, string $Email, string $Phone, string $CustomerReferenceId) {
+        $this->fullname = $Fullname;
         $this->email = $Email;
         $this->phone = $Phone;
-        $this->gender = $Gender;
-        $this->CustomerReferenceId = $CustomerReferenceId;
+        $this->customerReferenceId = $CustomerReferenceId;
     }
 
     /**
-     * @return fullname
+     * @return string
      */
     public function getFullname(): string
     {
@@ -29,7 +27,15 @@ class SpPaymentDebtorInformation
     }
 
     /**
-     * @return email
+     * @param string $fullname
+     */
+    public function setFullname(string $fullname): void
+    {
+        $this->fullname = $fullname;
+    }
+
+    /**
+     * @return string
      */
     public function getEmail(string $email): string
     {
@@ -37,27 +43,43 @@ class SpPaymentDebtorInformation
     }
 
     /**
-     * @return phone
+     * @param string $email
      */
-    public function getPhone(string $phone): string
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
     /**
-     * @return gender
+     * @param string $phone
      */
-    public function getGender(SpGender $phone): SpGender
+    public function setPhone(string $phone): void
     {
-        return $this->gender;
+        $this->phone = $phone;
     }
 
     /**
-     * @return customerReferenceId
+     * @return string
      */
-    public function getCustomerReferenceId(string $CustomerReferenceId): string
+    public function getCustomerReferenceId(): string
     {
-        return $this->CustomerReferenceId;
+        return $this->customerReferenceId;
+    }
+
+    /**
+     * @param string $customerReferenceId
+     */
+    public function setCustomerReferenceId(string $customerReferenceId): void
+    {
+        $this->customerReferenceId = $customerReferenceId;
     }
     
 }
