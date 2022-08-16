@@ -7,6 +7,7 @@ namespace Payment\Client;
 use Http\Promise\Promise;
 use Payment\Models\Payment\Domestic\SpCreateDomesticPaymentResponse;
 use Payment\Models\Payment\Domestic\SpDomesticPayment;
+use Payment\Models\Payment\Domestic\SpDomesticPaymentRequest;
 
 interface ISpPaymentClient
 {
@@ -14,7 +15,7 @@ interface ISpPaymentClient
      * @param SpDomesticPayment $payment
      * @return mixed
      */
-    function CreateDomesticPayment(SpDomesticPayment $payment, string $signature): SpCreateDomesticPaymentResponse;
+    function CreateDomesticPayment(SpDomesticPaymentRequest $payment, string $signature): SpCreateDomesticPaymentResponse;
 
     /**
      * @param string $id

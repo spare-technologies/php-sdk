@@ -2,6 +2,9 @@
 
 namespace Helpers\Security\DigitalSignature;
 
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 class serializer
 {
     function Serialise(array $payment): string
@@ -11,29 +14,40 @@ class serializer
     }
     private  function json_encode($value): string
     {
-        if (is_int($value)) {
-            return (string)$value;
-        } elseif (is_float($value)) {
-            return str_replace(",", ".", $value);
-        } elseif (is_null($value)) {
-            return 'null';
-        } elseif (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        } elseif (is_array($value)) {
-            $n = count($value);
-            for ($i = 0, reset($value); $i < $n; $i++, next($value)) {
-                if (key($value) !== $i) {
-                    break;
-                }
-            }
-        } elseif (is_object($value)) {
-        } else {
-            return '';
-        }
         $result = array();
         foreach ($value as $key => $v) {
-            $result[] = '"'.strval((string)$key).'"'.':'.'"'.strval($v).'"';
+            if (is_array($v)) {
+                foreach ($v as $k_sec => $v_sec) {
+                    if (is_array($v_sec)) {
+                        ksort($v_sec);
+                        $v[$k_sec] = $v_sec;      
+                    }
+                }
+                ksort($v);
+                $result[] = '"'.strval((string)$key).'"'.':'.json_encode($v);
+               
+            } else {
+                $result[] = '"'.strval((string)$key).'"'.':'.'"'.strval($v).'"';
+            }
+            
         }
         return '{'.implode(',', $result).'}';
+    }
+
+    function GetSerializer(): \Symfony\Component\Serializer\Serializer
+    {
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        return new \Symfony\Component\Serializer\Serializer($normalizers, $encoders);
+    }
+
+    function toArray(mixed $value): array {
+        $arr = (array) $value;
+        foreach ($arr as $key => $v) {
+            if (is_object($v)) {
+                $arr[$key] = (array) $v;
+            }
+        }
+        return $arr;
     }
 }

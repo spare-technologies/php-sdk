@@ -5,6 +5,7 @@ namespace Payment\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Payment\Models\Payment\Domestic\SpCreateDomesticPaymentResponse;
 use Payment\Models\Payment\Domestic\SpDomesticPayment;
+use Payment\Models\Payment\Domestic\SpDomesticPaymentRequest;
 use Payment\Models\Response\SpareSdkResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -26,7 +27,7 @@ class SpPaymentClient implements ISpPaymentClient
     /**
      * @throws GuzzleException
      */
-    public function CreateDomesticPayment(SpDomesticPayment $payment, string $signature): SpCreateDomesticPaymentResponse
+    public function CreateDomesticPayment(SpDomesticPaymentRequest $payment, string $signature): SpCreateDomesticPaymentResponse
     {
         $serializer = $this->GetSerializer();
         $client = new \GuzzleHttp\Client();
@@ -78,7 +79,7 @@ class SpPaymentClient implements ISpPaymentClient
                      'Content-Type' => 'application/json');
     }
 
-    private function GetSerializer(): Serializer
+    public function GetSerializer(): Serializer
     {
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];

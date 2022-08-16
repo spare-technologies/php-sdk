@@ -5,20 +5,20 @@ namespace Payment\Models\Payment\Domestic;
 
 class SpDomesticPaymentRequest extends SpDomesticPayment {
 
-    public SpPaymentDebtorInformation $customerInformation;
+    public mixed $customerInformation;
 
     /**
-     * @return SpPaymentDebtorInformation
+     * @return mixed
      */
-    public function getCustomerInformation(): SpPaymentDebtorInformation
+    public function getCustomerInformation(): mixed
     {
         return $this->customerInformation;
     }
 
     /**
-     * @param SpPaymentDebtorInformation $CustomerInformation
+     * @param mixed $CustomerInformation
      */
-    public function setCustomerInformation(SpPaymentDebtorInformation $CustomerInformation): void
+    public function setCustomerInformation(mixed $CustomerInformation): void
     {
         $this->customerInformation = $CustomerInformation;
     }

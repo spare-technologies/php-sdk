@@ -1,35 +1,29 @@
 <?php
 require_once __DIR__ . '/../../../vendor/autoload.php';
+
+use Payment\Models\Response\SpareSdkResponse;
 use PHPUnit\Framework\TestCase;
 use Payment\Client\SpPaymentClient;
 use Payment\Client\SpPaymentClientOptions;
 use Payment\Models\Payment\Domestic\SpDomesticPaymentRequest;
 use Helpers\Security\DigitalSignature\serializer;
 use Helpers\Security\DigitalSignature\EccSignatureManager;
-
+use test\php\models\SpTestEnvironment;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class SpPaymentClientTest extends TestCase {
     private SpPaymentClient $paymentClient;
-    private string $prKey;
-    private string $pubKey;
+    private SpTestEnvironment $testEnvironment;
 
     protected function setUp(): void
     {
-        $this->prKey = '-----BEGIN PRIVATE KEY-----
-MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgpIs8tj7kiNV6A8+j
-V7+7gWp/IfY2wJpwjxTU6FvzEk+hRANCAARpJ80jUMvH4V1Os77NGdZ3HEBMd9jg
-wwooy5l/h2MEuL8a18URu3HpLBV95/GA8LhmobcTOPAF9FrEx8UPqSpH
------END PRIVATE KEY-----';
-
-        $this->pubKey = '-----BEGIN PUBLIC KEY-----
-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaSfNI1DLx+FdTrO+zRnWdxxATHfY
-4MMKKMuZf4djBLi/GtfFEbtx6SwVfefxgPC4ZqG3EzjwBfRaxMfFD6kqRw==
------END PUBLIC KEY-----';
+        $this->LoadTestEnvironment();
 
         $this->paymentClient = new SpPaymentClient(
-            new SpPaymentClientOptions('https://payment.dev.tryspare.com',
-                'uydh6g0gfqvKhcxcVGAWS2V+T+h/8simgnbMFrj/tOw=',
-                '9LsJP+tpqhdEQQAs4wJ5EQZKLGeydf9RBt3xsJUs6GI=')
+            new SpPaymentClientOptions($this->testEnvironment->getBaseUrl(),
+                $this->testEnvironment->getAppId(),
+                $this->testEnvironment->getApiKey())
         );
     }
 
@@ -37,54 +31,135 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaSfNI1DLx+FdTrO+zRnWdxxATHfY
      * Create domestic payment test
      */
     public function testCreateDomesticPayment() {
-
-        $payment = new SpDomesticPaymentRequest();
-        $payment->setAmount(50);
-        $payment->setDescription('Test payment');
-        $payment->setOrderId('12345');
+        $faker = Faker\Factory::create();
+        $paymentRequest = new SpDomesticPaymentRequest();
+        $paymentRequest->setAmount($faker->buildingNumber);
+        $paymentRequest->setDescription($faker->catchPhrase);
+        $paymentRequest->setOrderId($faker->ean8);
 
         $signature = new EccSignatureManager();
         $serializer = new serializer();
-        $data = $serializer->Serialise(array('orderId' => '12345', 'amount' => 50, 'description' => 'Test payment'));
-        $sign = $signature->Sign($data, $this->prKey);
 
-        $rep = $this->paymentClient->CreateDomesticPayment($payment, $sign);
-        $this->assertNotNull($rep);
-        $this->assertTrue($signature->Verify($data, $sign, $this->pubKey));
+        $paymentResponse = $this->paymentClient->CreateDomesticPayment($paymentRequest,
+            $signature->Sign($serializer->Serialise((array) $paymentRequest), $this->testEnvironment->getEcKeypair()['private']));
 
-        $this->assertNotNull($rep->getPayment()['id']);
-        $this->assertNotEmpty($rep->getPayment()['id']);
+        putenv("paymentId={$paymentResponse->getPayment()['id']}");
 
-        $this->assertNotNull($rep->getPayment()['amount']);
-        $this->assertNotEmpty($rep->getPayment()['amount']);
+        $this->assertNotNull($paymentResponse);
 
-        $this->assertNotNull($rep->getPayment()['currency']);
-        $this->assertNotEmpty($rep->getPayment()['currency']);
+        $this->assertTrue($signature->Verify($serializer->Serialise($paymentResponse->getPayment()), $paymentResponse->getSignature(),
+            $this->testEnvironment->getServerPublicKey()));
 
-        $this->assertNotNull($rep->getPayment()['issuedFrom']);
-        $this->assertNotEmpty($rep->getPayment()['issuedFrom']);
+        $this->assertNotNull($paymentResponse->getPayment()['id']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['id']);
 
-        $this->assertNotNull($rep->getPayment()['reference']);
-        $this->assertNotEmpty($rep->getPayment()['reference']);
+        $this->assertNotNull($paymentResponse->getPayment()['amount']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['amount']);
+        $this->assertEquals($paymentResponse->getPayment()['amount'], $paymentRequest->getAmount());
 
-        $this->assertNotNull($rep->getPayment()['orderId']);
-        $this->assertNotEmpty($rep->getPayment()['orderId']);
+        $this->assertNotNull($paymentResponse->getPayment()['currency']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['currency']);
 
-        $this->assertNotNull($rep->getPayment()['createdAt']);
-        $this->assertNotEmpty($rep->getPayment()['createdAt']);
+        $this->assertNotNull($paymentResponse->getPayment()['issuedFrom']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['issuedFrom']);
 
-        $this->assertNotNull($rep->getPayment()['link']);
-        $this->assertNotEmpty($rep->getPayment()['link']);
+        $this->assertNotNull($paymentResponse->getPayment()['reference']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['reference']);
 
-        $this->assertNotNull($rep->getPayment()['description']);
-        $this->assertNotEmpty($rep->getPayment()['description']);
+        $this->assertNotNull($paymentResponse->getPayment()['orderId']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['orderId']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['createdAt']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['createdAt']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['link']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['link']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['description']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['description']);
+
+    
+    }
+
+    /**
+     * Create domestic payment with customer information
+     */
+
+    public function testCreateDomesticPaymentWithCustomerInformation() {
+        $faker = Faker\Factory::create();
+        $paymentRequest = new SpDomesticPaymentRequest();
+        $paymentRequest->setAmount($faker->buildingNumber);
+        $paymentRequest->setDescription($faker->catchPhrase);
+        $paymentRequest->setOrderId($faker->ean8);
+
+        $debtor = (array) new \Payment\Models\Payment\Domestic\SpPaymentDebtorInformation(
+            $faker->name, $faker->email, $faker->e164PhoneNumber, $faker->ean8);
+        $paymentRequest->setCustomerInformation($debtor);
+
+
+        $signature = new EccSignatureManager();
+        $serializer = new serializer();
+
+        $paymentResponse = $this->paymentClient->CreateDomesticPayment($paymentRequest,
+            $signature->Sign($serializer->Serialise((array) $paymentRequest), $this->testEnvironment->getEcKeypair()['private']));
+
+        putenv("paymentId={$paymentResponse->getPayment()['id']}");
+
+        $this->assertNotNull($paymentResponse);
+
+        $this->assertTrue($signature->Verify($serializer->Serialise($paymentResponse->getPayment()), $paymentResponse->getSignature(),
+            $this->testEnvironment->getServerPublicKey()));
+
+        $this->assertNotNull($paymentResponse->getPayment()['id']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['id']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['amount']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['amount']);
+        $this->assertEquals($paymentResponse->getPayment()['amount'], $paymentRequest->getAmount());
+
+        $this->assertNotNull($paymentResponse->getPayment()['currency']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['currency']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['issuedFrom']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['issuedFrom']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['reference']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['reference']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['orderId']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['orderId']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['createdAt']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['createdAt']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['link']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['link']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['description']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['description']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['debtor']['account']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['debtor']['account']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['debtor']['account']['id']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['debtor']['account']['id']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['debtor']['account']['fullname']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['debtor']['account']['fullname']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['debtor']['account']['phone']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['debtor']['account']['phone']);
+
+        $this->assertNotNull($paymentResponse->getPayment()['debtor']['account']['customerReferenceId']);
+        $this->assertNotEmpty($paymentResponse->getPayment()['debtor']['account']['customerReferenceId']);
     }
 
     /**
      * Get domestic payment test
      */
     public function testGetDomesticPayment() {
-        $rep = $this->paymentClient->GetDomesticPayment('34220fe8-8935-4779-8e1c-bba5e2282eac');
+        $paymentId = getenv('paymentId');
+        $rep = $this->paymentClient->GetDomesticPayment($paymentId);
 
         $this->assertNotNull($rep);
         $this->assertNotEmpty($rep);
@@ -105,5 +180,23 @@ MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEaSfNI1DLx+FdTrO+zRnWdxxATHfY
             $this->assertNotNull($value);
             $this->assertNotNull($value['reference']);
         }
+    }
+
+    public function GetSerializer(): Serializer
+    {
+        return new Serializer([new JsonEncoder()], [new ObjectNormalizer()]);
+    }
+
+    private function LoadTestEnvironment(): void {
+        $serializer = new serializer();
+        $jsonTestEnvironment = file_get_contents('testEnvironment.json');
+        $this->testEnvironment = $serializer->GetSerializer()->deserialize($jsonTestEnvironment, SpTestEnvironment::class, 'json');
+
+        $this->assertNotNull($this->testEnvironment);
+        $this->assertNotNull($this->testEnvironment->getEcKeypair());
+        $this->assertNotNull($this->testEnvironment->getApiKey());
+        $this->assertNotNull($this->testEnvironment->getAppId());
+        $this->assertNotNull($this->testEnvironment->getBaseUrl());
+        $this->assertNotNull($this->testEnvironment->getProxy());
     }
 }
