@@ -17,7 +17,7 @@ public class MyClass {
     
     printf("Private key \n", $keys->getPrivateKey())
     printf("\n\n");
-    printf("Private key \n", $keys.->getPublicKey());
+    printf("Private key \n", $keys->getPublicKey());
 }
 ```
 
