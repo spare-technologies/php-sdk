@@ -15,9 +15,9 @@ use Helpers\Crypto\SpCrypto;
 public class MyClass {
     $keys = SpCrypto::GenerateKeyPair();
     
-    printf("Private key \n", eccKeyPair.getPrivateKey())
+    printf("Private key \n", $keys->getPrivateKey())
     printf("\n\n");
-    printf("Private key \n", eccKeyPair.getPublicKey());
+    printf("Private key \n", $keys.->getPublicKey());
 }
 ```
 
