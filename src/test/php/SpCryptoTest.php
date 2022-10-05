@@ -6,15 +6,9 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 use Faker;
 use Helpers\Crypto\SpCrypto;
 use Helpers\Security\DigitalSignature\EccSignatureManager;
-use Helpers\Serialization\SortedNormalizer;
-use Helpers\Serialization\SpSerializer;
 use Payment\Models\Payment\Domestic\SpCustomerInformation;
-use Payment\Models\Payment\Domestic\SpDomesticPayment;
-use Payment\Models\Payment\Domestic\SpPayment;
 use Payment\Models\Payment\Domestic\SpPaymentRequest;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Serializer;
 
 class SpCryptoTest extends TestCase
 {

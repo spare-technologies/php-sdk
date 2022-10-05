@@ -12,7 +12,6 @@ use Payment\Client\SpPaymentClientOptions;
 use Payment\Client\SpPaymentSdkException;
 use Payment\Models\Payment\Domestic\SpCustomerInformation;
 use Payment\Models\Payment\Domestic\SpPaymentRequest;
-use Payment\Models\Payment\Domestic\SpPaymentResponse;
 use PHPUnit\Framework\TestCase;
 use test\php\models\SpTestEnvironment;
 
