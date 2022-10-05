@@ -1,5 +1,5 @@
 {
-  "name": "spare/php-sdk",
+  "name": "spare-technologies/php-sdk",
   "homepage": "https://github.com/spare-technologies/php-sdk",
   "description": "Spare payment sdk",
   "type": "library",
