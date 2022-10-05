@@ -22,7 +22,8 @@ class SpDomesticPaymentResponse extends SpDomesticPayment
 
     function __construct(string $Id, string $Reference, string $Currency,
                          SpUserAccount $Issuer, ?SpPaymentSource $IssuedFrom,
-                         SpPaymentUserAccount $Debtor, string $Link, string $CreatedAt) {
+                         SpPaymentUserAccount $Debtor, string $Link, string $CreatedAt)
+    {
         $this->id = $Id;
         $this->reference = $Reference;
         $this->currency = $Currency;

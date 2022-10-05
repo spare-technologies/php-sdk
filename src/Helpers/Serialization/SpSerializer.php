@@ -1,18 +1,19 @@
 <?php
 
-namespace Helpers\Security\DigitalSignature;
+namespace Helpers\Serialization;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class serializer
+class Serializer
 {
-    function Serialise(array $payment): string
+    public function Serialise(array $payment): string
     {
         ksort($payment);
         return $this->json_encode(array_filter($payment));
     }
-    private  function json_encode($value): string
+
+    private function json_encode($value): string
     {
         $result = array();
         foreach ($value as $key => $v) {
@@ -20,18 +21,18 @@ class serializer
                 foreach ($v as $k_sec => $v_sec) {
                     if (is_array($v_sec)) {
                         ksort($v_sec);
-                        $v[$k_sec] = $v_sec;      
+                        $v[$k_sec] = $v_sec;
                     }
                 }
                 ksort($v);
-                $result[] = '"'.strval((string)$key).'"'.':'.json_encode($v);
-               
+                $result[] = '"' . $key . '"' . ':' . json_encode($v);
+
             } else {
-                $result[] = '"'.strval((string)$key).'"'.':'.'"'.strval($v).'"';
+                $result[] = '"' . $key . '"' . ':' . '"' . strval($v) . '"';
             }
-            
+
         }
-        return '{'.implode(',', $result).'}';
+        return '{' . implode(',', $result) . '}';
     }
 
     function GetSerializer(): \Symfony\Component\Serializer\Serializer
@@ -41,11 +42,12 @@ class serializer
         return new \Symfony\Component\Serializer\Serializer($normalizers, $encoders);
     }
 
-    function toArray(mixed $value): array {
-        $arr = (array) $value;
+    function toArray(mixed $value): array
+    {
+        $arr = (array)$value;
         foreach ($arr as $key => $v) {
             if (is_object($v)) {
-                $arr[$key] = (array) $v;
+                $arr[$key] = (array)$v;
             }
         }
         return $arr;

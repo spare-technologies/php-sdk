@@ -1,47 +1,59 @@
 <?php
+
+namespace test\php;
 require_once __DIR__ . '/../../../vendor/autoload.php';
-use PHPUnit\Framework\TestCase;
+
+use Faker;
 use Helpers\Crypto\SpCrypto;
 use Helpers\Security\DigitalSignature\EccSignatureManager;
-use Helpers\Security\DigitalSignature\serializer;
-use Payment\Models\Payment\Domestic\SpDomesticPaymentRequest;
+use Helpers\Serialization\SortedNormalizer;
+use Helpers\Serialization\SpSerializer;
+use Payment\Models\Payment\Domestic\SpCustomerInformation;
+use Payment\Models\Payment\Domestic\SpDomesticPayment;
+use Payment\Models\Payment\Domestic\SpPayment;
+use Payment\Models\Payment\Domestic\SpPaymentRequest;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Serializer;
 
-class SpCryptoTest extends TestCase {
+class SpCryptoTest extends TestCase
+{
     /**
      * Generate Ec key test
      */
-    public function testGenerateEcKeyPair() {
-        try {
-            $spCrypto = new SpCrypto();
-            $keys = $spCrypto->GenerateKeyPair();
-            $this->assertNotNull($keys);
-            $this->assertNotEmpty($keys->getPrivateKey());
-            $this->assertNotEmpty($keys->getPublicKey());
-        } catch (\ParagonIE\EasyECC\Exception\NotImplementedException $e) {
-        }
+    public function testGenerateEcKeyPair()
+    {
+        $keys = SpCrypto::GenerateKeyPair();
+        $this->assertNotNull($keys);
+        $this->assertNotEmpty($keys->getPrivateKey());
+        $this->assertNotEmpty($keys->getPublicKey());
+        putenv("keys=ali");
     }
 
     /**
      * Sign and verify object test
      */
-    public function testSignAndVerify() {
+    public function testSignAndVerify()
+    {
         $faker = Faker\Factory::create();
-        $payment = new SpDomesticPaymentRequest();
-        $payment->setAmount($faker->buildingNumber);
+        $payment = new SpPaymentRequest();
+        $payment->setAmount($faker->randomFloat());
         $payment->setDescription($faker->catchPhrase);
         $payment->setOrderId($faker->ean8);
-        $spCrypto = new SpCrypto();
-        $keys = $spCrypto->GenerateKeyPair();
-        try {
-            $signatureManager = new EccSignatureManager();
-            $serializer = new serializer();
-            $signature = $signatureManager->Sign($serializer->Serialise((array) $payment), $keys->getPrivateKey());
-            $this->assertNotEmpty($signature);
-            $verify = $signatureManager->Verify($serializer->Serialise((array) $payment), $signature, $keys->getPublicKey());
-            $this->assertTrue($verify);
-            $falseVerify = $signatureManager->Verify('aaaa', $signature, $keys->getPublicKey());
-            $this->assertFalse($falseVerify);
-        } catch (\ParagonIE\EasyECC\Exception\NotImplementedException $e){
-        }
+
+        $customerInfo = new SpCustomerInformation();
+        $customerInfo->setEmail($faker->email);
+        $customerInfo->setFullname($faker->firstName);
+        $customerInfo->setCustomerReferenceId(str_replace("#", '', $faker->hexColor));
+
+        $payment->setCustomerInformation($customerInfo);
+
+        $keys = SpCrypto::GenerateKeyPair();
+
+        $signature = EccSignatureManager::Sign($payment->toJonsString(), $keys->privateKey);
+
+        $this->assertNotEmpty($signature);
+
+        $this->assertTrue(EccSignatureManager::Verify($payment->toJonsString(), $signature, $keys->publicKey));
     }
 }

@@ -4,18 +4,10 @@ namespace test\php\models;
 
 class SpTestProxy
 {
-    private string $host;
-    private string $port;
-    private string $username;
-    private string $password;
-
-    public function __construct(string $host, string $port, string $username, string $password)
-    {
-        $this->host = $host;
-        $this->port = $port;
-        $this->username = $username;
-        $this->password = $password;
-    }
+    public string $host;
+    public string $port;
+    public string $username;
+    public string $password;
 
     /**
      * @return string
@@ -23,30 +15,6 @@ class SpTestProxy
     public function getHost(): string
     {
         return $this->host;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPort(): string
-    {
-        return $this->port;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword(): string
-    {
-        return $this->password;
     }
 
     /**
@@ -58,11 +26,27 @@ class SpTestProxy
     }
 
     /**
+     * @return string
+     */
+    public function getPort(): string
+    {
+        return $this->port;
+    }
+
+    /**
      * @param string $port
      */
     public function setPort(string $port): void
     {
         $this->port = $port;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
     }
 
     /**
@@ -74,11 +58,20 @@ class SpTestProxy
     }
 
     /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
      * @param string $password
      */
     public function setPassword(string $password): void
     {
         $this->password = $password;
     }
+
 
 }

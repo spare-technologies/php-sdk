@@ -4,8 +4,8 @@ namespace test\php\models;
 
 class SpTestEcKeypair
 {
-    private string $privateKey;
-    private string $publicKey;
+    public string $privateKey;
+    public string $publicKey;
 
     /**
      * @return string
@@ -13,14 +13,6 @@ class SpTestEcKeypair
     public function getPrivateKey(): string
     {
         return $this->privateKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPublicKey(): string
-    {
-        return $this->publicKey;
     }
 
     /**
@@ -32,11 +24,20 @@ class SpTestEcKeypair
     }
 
     /**
+     * @return string
+     */
+    public function getPublicKey(): string
+    {
+        return $this->publicKey;
+    }
+
+    /**
      * @param string $publicKey
      */
     public function setPublicKey(string $publicKey): void
     {
         $this->publicKey = $publicKey;
     }
+
 
 }

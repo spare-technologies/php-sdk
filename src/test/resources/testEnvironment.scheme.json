@@ -2,8 +2,8 @@
   "debugMode": false,
   "baseUrl": "",
   "ecKeypair": {
-    "private": "",
-    "public": ""
+    "privateKey": "",
+    "publicKey": ""
   },
   "serverPublicKey": "",
   "apiKey": "",
