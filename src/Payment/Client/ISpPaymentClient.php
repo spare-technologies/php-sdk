@@ -4,30 +4,40 @@
 namespace Payment\Client;
 
 
-use Http\Promise\Promise;
+use GuzzleHttp\Exception\GuzzleException;
 use Payment\Models\Payment\Domestic\SpCreateDomesticPaymentResponse;
-use Payment\Models\Payment\Domestic\SpDomesticPayment;
-use Payment\Models\Payment\Domestic\SpDomesticPaymentRequest;
+use Payment\Models\Payment\Domestic\SpPaymentRequest;
+use Payment\Models\Payment\Domestic\SpPaymentResponse;
 
 interface ISpPaymentClient
 {
     /**
-     * @param SpDomesticPayment $payment
-     * @return mixed
+     * Create domestic payment
+     * @param SpPaymentRequest $payment
+     * @param string $signature
+     * @return SpCreateDomesticPaymentResponse
+     * @throws GuzzleException
+     * @throws SpPaymentSdkException
      */
-    function CreateDomesticPayment(SpDomesticPaymentRequest $payment, string $signature): SpCreateDomesticPaymentResponse;
+    function CreateDomesticPayment(SpPaymentRequest $payment, string $signature): SpCreateDomesticPaymentResponse;
 
     /**
+     * Get domestic payment
      * @param string $id
-     * @return mixed
+     * @return SpPaymentResponse
+     * @throws GuzzleException
+     * @throws SpPaymentSdkException
      */
-    function GetDomesticPayment(string $id);
+    function GetDomesticPayment(string $id): SpPaymentResponse;
 
     /**
+     * List domestic payments
      * @param int $start
      * @param int $perPage
-     * @return mixed
+     * @return array
+     * @throws GuzzleException
+     * @throws SpPaymentSdkException
      */
-    function ListDomesticPayment(int $start, int $perPage);
+    function ListDomesticPayment(int $start, int $perPage): array;
 
 }

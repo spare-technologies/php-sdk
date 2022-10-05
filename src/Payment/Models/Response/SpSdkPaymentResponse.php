@@ -7,7 +7,7 @@ namespace Payment\Models\Response;
 use Payment\Models\Payment\Domestic\SpPaymentResponse;
 use Payment\Models\SpBaseModel;
 
-class SpareSdkResponse extends SpBaseModel
+class SpSdkPaymentResponse extends SpBaseModel
 {
     public ?string $error;
     public ?SpPaymentResponse $data;

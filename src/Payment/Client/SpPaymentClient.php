@@ -2,89 +2,127 @@
 
 
 namespace Payment\Client;
+
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
+use Helpers\Serialization\SpSerializer;
 use Payment\Models\Payment\Domestic\SpCreateDomesticPaymentResponse;
-use Payment\Models\Payment\Domestic\SpDomesticPayment;
-use Payment\Models\Payment\Domestic\SpDomesticPaymentRequest;
-use Payment\Models\Response\SpareSdkResponse;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Payment\Models\Payment\Domestic\SpPaymentRequest;
+use Payment\Models\Payment\Domestic\SpPaymentResponse;
+use Payment\Models\Response\SpSdkPaymentResponse;
+use Payment\Models\Response\SpSdkPaymentsResponse;
 
 
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 class SpPaymentClient implements ISpPaymentClient
 {
 
     public SpPaymentClientOptions $clientOptions;
 
-    function __construct(SpPaymentClientOptions $ClientOptions) {
+    function __construct(SpPaymentClientOptions $ClientOptions)
+    {
         $this->clientOptions = $ClientOptions;
     }
 
-
     /**
+     * Create domestic payment
+     * @param SpPaymentRequest $payment
+     * @param string $signature
+     * @return SpCreateDomesticPaymentResponse
      * @throws GuzzleException
+     * @throws SpPaymentSdkException
      */
-    public function CreateDomesticPayment(SpDomesticPaymentRequest $payment, string $signature): SpCreateDomesticPaymentResponse
+    public function CreateDomesticPayment(SpPaymentRequest $payment, string $signature): SpCreateDomesticPaymentResponse
     {
-        $serializer = $this->GetSerializer();
-        $client = new \GuzzleHttp\Client();
-        $headers = array('app-id' => $this->clientOptions->appId,
-                         'x-api-key' => $this->clientOptions->appKey,
-                         'Content-Type' => 'application/json',
-                         'x-signature' => $signature);
-        $request = new \GuzzleHttp\Psr7\Request('POST', $this->GetUrl(SpEndPoints::$CreateDomesticPayment),
-            $headers, json_encode($payment));
+        $client = new Client();
+
+        $request = new Request('POST', $this->buildUrl(SpEndPoints::$CreateDomesticPayment),
+            $this->GetHeaders($signature), $payment->toJonsString());
+
         $response = $client->send($request);
-        $responseData = $serializer->deserialize($response->getBody(), SpareSdkResponse::class, 'json');
-        return new SpCreateDomesticPaymentResponse(
-            $responseData->getData(),
-            $response->getHeaderLine("x-signature")
-    );
+
+        if ($response->getStatusCode() != 200) {
+            throw new SpPaymentSdkException($response->getBody());
+        }
+
+        $responseData = SpSerializer::getDeserializer()->deserialize($response->getBody(), SpSdkPaymentResponse::class, 'json');
+
+        return new SpCreateDomesticPaymentResponse($responseData->getData(), $response->getHeaderLine("x-signature"));
     }
 
     /**
+     * Get domestic payment
+     * @param string $id
+     * @return SpPaymentResponse
      * @throws GuzzleException
+     * @throws SpPaymentSdkException
      */
-    public function GetDomesticPayment(string $id)
+    public function GetDomesticPayment(string $id): SpPaymentResponse
     {
-        $serializer = $this->GetSerializer();
-        $client = new \GuzzleHttp\Client();
-        $request = new \GuzzleHttp\Psr7\Request('GET', "{$this->GetUrl(SpEndPoints::$GetDomesticPayment)}?id=$id", $this->GetHeaders());
-        $response = $serializer->deserialize($client->send($request)->getBody(), SpareSdkResponse::class, 'json');
-        return $response->getData();
+        $client = new Client();
+
+        $request = new Request('GET', "{$this->buildUrl(SpEndPoints::$GetDomesticPayment)}?id=$id", $this->GetHeaders());
+
+        $response = $client->send($request);
+
+        if ($response->getStatusCode() != 200) {
+            throw new SpPaymentSdkException($response->getBody());
+        }
+
+        $responseData = SpSerializer::getDeserializer()->deserialize($response->getBody(), SpSdkPaymentResponse::class, 'json');
+
+        return $responseData->getData();
     }
 
     /**
+     * List domestic payments
+     * @param int $start
+     * @param int $perPage
+     * @return array
      * @throws GuzzleException
+     * @throws SpPaymentSdkException
      */
-    public function ListDomesticPayment(int $start, int $perPage)
+    public function ListDomesticPayment(int $start, int $perPage): array
     {
-        $serializer = $this->GetSerializer();
-        $client = new \GuzzleHttp\Client();
-        $request = new \GuzzleHttp\Psr7\Request('GET', "{$this->GetUrl(SpEndPoints::$ListDomesticPayment)}?start=$start&perPage=$perPage" , $this->GetHeaders());
-        $response = $serializer->deserialize($client->send($request)->getBody(), SpareSdkResponse::class, 'json');
-        return $response->getData();
+        $client = new Client();
+        $request = new Request('GET', "{$this->buildUrl(SpEndPoints::$ListDomesticPayment)}?start=$start&perPage=$perPage", $this->GetHeaders());
+
+        $response = $client->send($request);
+
+        if ($response->getStatusCode() != 200) {
+            throw new SpPaymentSdkException($response->getBody());
+        }
+
+        $responseData = SpSerializer::getDeserializer()->deserialize($response->getBody(), SpSdkPaymentsResponse::class, 'json');
+
+        return $responseData->getData();
     }
 
-    private function GetUrl($endpoint): string {
+    /**
+     * Build request URL
+     * @param $endpoint
+     * @return string
+     */
+    private function buildUrl($endpoint): string
+    {
         return "{$this->clientOptions->baseUrl}{$endpoint}";
     }
 
-    private function GetHeaders(): array {
-        return array('app-id' => $this->clientOptions->appId,
-                     'x-api-key' => $this->clientOptions->appKey,
-                     'Content-Type' => 'application/json');
-    }
-
-    public function GetSerializer(): Serializer
+    /**
+     * Get request headers
+     * @param string|null $signature
+     * @return array
+     */
+    private function GetHeaders(?string $signature = null): array
     {
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        return new Serializer($normalizers, $encoders);
+        $headers = array('app-id' => $this->clientOptions->appId,
+            'x-api-key' => $this->clientOptions->appKey,
+            'Content-Type' => 'application/json');
+        if ($signature != null) {
+            $headers['x-signature'] = $signature;
+        }
+        return $headers;
     }
-
-
 }

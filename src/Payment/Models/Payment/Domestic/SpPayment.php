@@ -6,11 +6,11 @@ namespace Payment\Models\Payment\Domestic;
 
 use Payment\Models\SpBaseModel;
 
-class SpDomesticPayment extends SpBaseModel
+abstract class SpPayment extends SpBaseModel
 {
-    protected float $amount;
+    public float $amount;
 
-    protected string $description;
+    public string $description;
 
     /**
      * Get amount

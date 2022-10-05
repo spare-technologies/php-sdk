@@ -17,6 +17,10 @@ class SpBaseModel
         $encoders = [new JsonEncoder()];
         $normalizers = [new SortedNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
-        return $serializer->serialize($this, 'json');
+        $json = $serializer->serialize($this, 'json');
+        if ($json == "[]") {
+            return "{}";
+        }
+        return $json;
     }
 }

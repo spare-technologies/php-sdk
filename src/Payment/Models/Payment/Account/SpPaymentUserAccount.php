@@ -3,42 +3,18 @@
 
 namespace Payment\Models\Payment\Account;
 
-use Payment\Models\Payment\Account\SpUserAccount;
-use Payment\Models\Payment\Account\SpUserPaymentBankAccount;
 
-
-class SpPaymentUserAccount
+final class SpPaymentUserAccount
 {
     public SpUserAccount $account;
     public SpUserPaymentBankAccount $bankAccount;
 
-    function __construct(SpUserAccount $Account, SpUserPaymentBankAccount $BankAccount) {
-        $this->account = $Account;
-        $this->bankAccount = $BankAccount;
-    }
-
-    /**
-     * @return SpUserAccount
-     */
-    public function getAccount(): SpUserAccount
-    {
-        return $this->account;
-    }
-
     /**
      * @param SpUserAccount $account
      */
-    public function setAccount(SpUserAccount $account)
+    public function setAccount(SpUserAccount $account): void
     {
         $this->account = $account;
-    }
-
-    /**
-     * @return SpUserPaymentBankAccount
-     */
-    public function getBankAccount(): SpUserPaymentBankAccount
-    {
-        return $this->bankAccount;
     }
 
     /**
@@ -49,4 +25,22 @@ class SpPaymentUserAccount
         $this->bankAccount = $bankAccount;
     }
 
+
+    /**
+     * Get account
+     * @return SpUserAccount
+     */
+    public function getAccount(): SpUserAccount
+    {
+        return $this->account;
+    }
+
+    /**
+     * Get payment bank account
+     * @return SpUserPaymentBankAccount
+     */
+    public function getBankAccount(): SpUserPaymentBankAccount
+    {
+        return $this->bankAccount;
+    }
 }

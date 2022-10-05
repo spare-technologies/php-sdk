@@ -2,51 +2,39 @@
 
 namespace Payment\Models\Payment\Domestic;
 
-class SpCreateDomesticPaymentResponse
+use Payment\Models\SpBaseModel;
+
+class SpCreateDomesticPaymentResponse extends SpBaseModel
 {
-    public array $payment;
+    public SpPaymentResponse $payment;
     public string $signature;
 
     /**
-     * @param array $payment
+     * @param SpPaymentResponse $payment
      * @param string $signature
      */
-    public function __construct(array $payment, string $signature)
+    public function __construct(SpPaymentResponse $payment, string $signature)
     {
         $this->payment = $payment;
         $this->signature = $signature;
     }
 
     /**
-     * @return array
+     * Get payment response
+     * @return SpPaymentResponse
      */
-    public function getPayment(): array
+    public function getPayment(): SpPaymentResponse
     {
         return $this->payment;
     }
 
     /**
-     * @param array $payment
-     */
-    public function setPayment(array $payment): void
-    {
-        $this->payment = $payment;
-    }
-
-    /**
+     * Get signature
      * @return string
      */
     public function getSignature(): string
     {
         return $this->signature;
-    }
-
-    /**
-     * @param string $signature
-     */
-    public function setSignature(string $signature): void
-    {
-        $this->signature = $signature;
     }
 
 

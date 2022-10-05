@@ -7,14 +7,16 @@ class SpEcKeyPair
     public string $privateKey;
     public string $publicKey;
 
-    function __construct()
+
+    function __construct(string $privateKey, string $publicKey)
     {
-        $this->privateKey = "";
-        $this->publicKey = "";
+        $this->setPrivateKey($privateKey);
+        $this->setPublicKey($publicKey);
     }
 
     /**
-     * @return int
+     * Get ECC private key
+     * @return string
      */
     public function getPrivateKey(): string
     {
@@ -22,7 +24,9 @@ class SpEcKeyPair
     }
 
     /**
+     * Set ECC private key
      * @param string $privateKey
+     * @return void
      */
     public function setPrivateKey(string $privateKey): void
     {
@@ -30,6 +34,7 @@ class SpEcKeyPair
     }
 
     /**
+     * Get ECC public key
      * @return string
      */
     public function getPublicKey(): string
@@ -38,7 +43,9 @@ class SpEcKeyPair
     }
 
     /**
+     * Set ECC public key
      * @param string $publicKey
+     * @return void
      */
     public function setPublicKey(string $publicKey): void
     {

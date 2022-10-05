@@ -9,7 +9,13 @@ use EllipticCurve\PublicKey;
 
 class EccSignatureManager
 {
-    function Sign(string $data, string $privateKey): string
+    /**
+     * Sign string
+     * @param string $data
+     * @param string $privateKey
+     * @return string
+     */
+    public static function Sign(string $data, string $privateKey): string
     {
         $ecc = new Ecdsa();
         $key = new PrivateKey();
@@ -18,7 +24,15 @@ class EccSignatureManager
         return $signature->toBase64();
     }
 
-    function Verify(string $data, string $signature, $publicKey): bool {
+    /**
+     * Verify string signature
+     * @param string $data
+     * @param string $signature
+     * @param $publicKey
+     * @return bool
+     */
+    public static function Verify(string $data, string $signature, $publicKey): bool
+    {
         $ecc = new Ecdsa();
         $key = new PublicKey($publicKey);
         $PublicKey = $key::fromPem($publicKey);

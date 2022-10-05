@@ -4,53 +4,109 @@
 namespace Payment\Models\Payment\Domestic;
 
 
+use Helpers\Serialization\SpSerializer;
 use Payment\Enum\SpPaymentSource;
 use Payment\Models\Payment\Account\SpPaymentUserAccount;
 use Payment\Models\Payment\Account\SpUserAccount;
-use Payment\Models\Payment\Domestic\SpDomesticPayment;
+use Payment\Models\Payment\Domestic\SpPayment;
+use Payment\Models\Response\SpSdkPaymentsResponse;
+use Payment\Models\SpPaymentUserAccount\SpPaymentIssuer;
 
-class SpDomesticPaymentResponse extends SpDomesticPayment
+final class SpPaymentResponse extends SpDomesticPayment
 {
     public string $id;
     public string $reference;
+    public string $orderId;
     public string $currency;
-    public SpUserAccount $issuer;
-    public ?SpPaymentSource $issuedFrom;
+    public SpPaymentIssuer $issuer;
+    public string $issuedFrom;
     public SpPaymentUserAccount $debtor;
     public string $link;
     public string $createdAt;
 
-    function __construct(string $Id, string $Reference, string $Currency,
-                         SpUserAccount $Issuer, ?SpPaymentSource $IssuedFrom,
-                         SpPaymentUserAccount $Debtor, string $Link, string $CreatedAt)
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): void
     {
-        $this->id = $Id;
-        $this->reference = $Reference;
-        $this->currency = $Currency;
-        $this->issuer = $Issuer;
-        $this->issuedFrom = $IssuedFrom;
-        $this->debtor = $Debtor;
-        $this->link = $Link;
-        $this->createdAt = $CreatedAt;
+        $this->id = $id;
     }
 
     /**
-     * @return int
+     * @param string $reference
      */
-    public function getId(): int
+    public function setReference(string $reference): void
+    {
+        $this->reference = $reference;
+    }
+
+    /**
+     * @param string $orderId
+     */
+    public function setOrderId(string $orderId): void
+    {
+        $this->orderId = $orderId;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * @param SpPaymentIssuer $issuer
+     */
+    public function setIssuer(SpPaymentIssuer $issuer): void
+    {
+        $this->issuer = $issuer;
+    }
+
+    /**
+     * @param string $issuedFrom
+     */
+    public function setIssuedFrom(string $issuedFrom): void
+    {
+        $this->issuedFrom = $issuedFrom;
+    }
+
+    /**
+     * @param SpPaymentUserAccount $debtor
+     */
+    public function setDebtor(SpPaymentUserAccount $debtor): void
+    {
+        $this->debtor = $debtor;
+    }
+
+    /**
+     * @param string $link
+     */
+    public function setLink(string $link): void
+    {
+        $this->link = $link;
+    }
+
+    /**
+     * @param string $createdAt
+     */
+    public function setCreatedAt(string $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Get id
+     * @return string
+     */
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * @param string $Id
-     */
-    public function setId(string $Id): void
-    {
-        $this->id = $Id;
-    }
-
-    /**
+     * Get reference
      * @return string
      */
     public function getReference(): string
@@ -59,14 +115,16 @@ class SpDomesticPaymentResponse extends SpDomesticPayment
     }
 
     /**
-     * @param string @Reference
+     * Get order id
+     * @return string
      */
-    public function setReference(string $Reference): void
+    public function getOrderId(): string
     {
-        $this->reference = $Reference;
+        return $this->orderId;
     }
 
     /**
+     * Get currency
      * @return string
      */
     public function getCurrency(): string
@@ -75,30 +133,25 @@ class SpDomesticPaymentResponse extends SpDomesticPayment
     }
 
     /**
-     * @param string $Currency
+     * Get issuer account
+     * @return SpPaymentIssuer
      */
-    public function setCurrency(string $Currency): void
-    {
-        $this->currency = $Currency;
-    }
-
-    /**
-     * @return SpUserAccount
-     */
-    public function getIssuer(): SpUserAccount
+    public function getIssuer(): SpPaymentIssuer
     {
         return $this->issuer;
     }
 
     /**
-     * @param SpUserAccount $Issuer
+     * Get payment issuing source
+     * @return string
      */
-    public function setIssuer(SpUserAccount $Issuer): void
+    public function getIssuedFrom(): string
     {
-        $this->issuer = $Issuer;
+        return $this->issuedFrom;
     }
 
     /**
+     * Get payment debtor
      * @return SpPaymentUserAccount
      */
     public function getDebtor(): SpPaymentUserAccount
@@ -107,31 +160,7 @@ class SpDomesticPaymentResponse extends SpDomesticPayment
     }
 
     /**
-     * @param SpPaymentUserAccount $Debtor
-     */
-    public function setDebtor(SpPaymentUserAccount $Debtor): void
-    {
-        $this->debtor = $Debtor;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCreatedAt(): string
-    {
-        return $this->createdAt;
-    }
-
-
-    /**
-     * @param string @CreatedAt
-     */
-    public function setCreatedAt(string $CreatedAt): void
-    {
-        $this->createdAt = $CreatedAt;
-    }
-
-    /**
+     * Get payment link
      * @return string
      */
     public function getLink(): string
@@ -140,27 +169,11 @@ class SpDomesticPaymentResponse extends SpDomesticPayment
     }
 
     /**
-     * @param string @Link
+     * Get created at
+     * @return string
      */
-    public function setLink(string $Link): void
+    public function getCreatedAt(): string
     {
-        $this->link = $Link;
+        return $this->createdAt;
     }
-
-    /**
-     * @return SpPaymentSource|null
-     */
-    public function getIssuedFrom(): ?SpPaymentSource
-    {
-        return $this->issuedFrom;
-    }
-
-    /**
-     * @param SpPaymentSource $IssuedFrom
-     */
-    public function setIssuedFrom(SpPaymentSource $IssuedFrom): void
-    {
-        $this->issuedFrom = $IssuedFrom;
-    }
-
 }

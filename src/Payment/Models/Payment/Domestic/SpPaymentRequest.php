@@ -3,10 +3,10 @@
 namespace Payment\Models\Payment\Domestic;
 
 
-final class SpDomesticPaymentRequest extends SpDomesticPayment
+final class SpPaymentRequest extends SpDomesticPayment
 {
 
-    protected SpCustomerInformation $customerInformation;
+    public SpCustomerInformation $customerInformation;
 
     /**
      * @return SpCustomerInformation

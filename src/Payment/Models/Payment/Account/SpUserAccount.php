@@ -4,40 +4,11 @@
 namespace Payment\Models\Payment\Account;
 
 
-class SpUserAccount
+class SpUserAccount extends SpAccount
 {
     public string $customerReferenceId;
+
     public string $customerPaymentLink;
-
-    function __construct(string $CustomerReferenceId, string $CustomerPaymentLink) {
-        $this->customerReferenceId = $customerReferenceId;
-        $this->customerPaymentLink = $CustomerPaymentLink;
-
-    }
-
-    /**
-     * @return string
-     */
-    public function getCustomerPaymentLink(): string
-    {
-        return $this->customerPaymentLink;
-    }
-
-    /**
-     * @param string $customerPaymentLink
-     */
-    public function setCustomerPaymentLink(string $customerPaymentLink): string
-    {
-        return $this->customerPaymentLink;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCustomerReferenceId(): string
-    {
-        return $this->customerReferenceId;
-    }
 
     /**
      * @param string $customerReferenceId
@@ -47,4 +18,29 @@ class SpUserAccount
         $this->customerReferenceId = $customerReferenceId;
     }
 
+    /**
+     * @param string $customerPaymentLink
+     */
+    public function setCustomerPaymentLink(string $customerPaymentLink): void
+    {
+        $this->customerPaymentLink = $customerPaymentLink;
+    }
+
+    /**
+     * Get payment link
+     * @return string
+     */
+    public function getCustomerPaymentLink(): string
+    {
+        return $this->customerPaymentLink;
+    }
+
+    /**
+     * Get customer reference id
+     * @return string
+     */
+    public function getCustomerReferenceId(): string
+    {
+        return $this->customerReferenceId;
+    }
 }

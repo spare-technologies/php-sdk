@@ -4,38 +4,17 @@
 namespace Payment\Models\Payment\Account;
 
 
-class SpUserPaymentBankAccount
+final class SpUserPaymentBankAccount
 {
-    public string $schema;
+    public string $scheme;
     public string $identification;
 
-    function __construct(string $Schema, string $Identification) {
-        $this->schema = $Schema;
-        $this->identification = $Identification;
-    }
-
     /**
-     * @return string
+     * @param string $scheme
      */
-    public function getSchema(): string
+    public function setScheme(string $scheme): void
     {
-        return $this->schema;
-    }
-
-    /**
-     * @param string $schema
-     */
-    public function setSchema(string $schema): void
-    {
-        $this->schema = $schema;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentification(): string
-    {
-        return $this->identification;
+        $this->scheme = $scheme;
     }
 
     /**
@@ -46,4 +25,22 @@ class SpUserPaymentBankAccount
         $this->identification = $identification;
     }
 
+
+    /**
+     * Get scheme name
+     * @return string
+     */
+    public function getSchema(): string
+    {
+        return $this->scheme;
+    }
+
+    /**
+     * Get identification
+     * @return string
+     */
+    public function getIdentification(): string
+    {
+        return $this->identification;
+    }
 }

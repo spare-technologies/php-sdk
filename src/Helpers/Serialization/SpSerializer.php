@@ -2,54 +2,57 @@
 
 namespace Helpers\Serialization;
 
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
-class Serializer
+class SpSerializer
 {
-    public function Serialise(array $payment): string
+    /**
+     * Get json string
+     * @param $object
+     * @return string
+     */
+    public static function toJonsString($object): string
     {
-        ksort($payment);
-        return $this->json_encode(array_filter($payment));
-    }
-
-    private function json_encode($value): string
-    {
-        $result = array();
-        foreach ($value as $key => $v) {
-            if (is_array($v)) {
-                foreach ($v as $k_sec => $v_sec) {
-                    if (is_array($v_sec)) {
-                        ksort($v_sec);
-                        $v[$k_sec] = $v_sec;
-                    }
-                }
-                ksort($v);
-                $result[] = '"' . $key . '"' . ':' . json_encode($v);
-
-            } else {
-                $result[] = '"' . $key . '"' . ':' . '"' . strval($v) . '"';
-            }
-
+        if (is_array($object) && count($object) <= 0) {
+            return "[]";
         }
-        return '{' . implode(',', $result) . '}';
+
+        $json = SpSerializer::getSerializer()->serialize($object, 'json');
+
+        if ($json == "[]") {
+            return "{}";
+        }
+
+        return $json;
     }
 
-    function GetSerializer(): \Symfony\Component\Serializer\Serializer
+    /**
+     * Get object serializer
+     * @return Serializer
+     */
+    public static function getSerializer(): Serializer
     {
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        return new \Symfony\Component\Serializer\Serializer($normalizers, $encoders);
+        $normalizers = [new SortedNormalizer()];
+        return new Serializer($normalizers, $encoders);
     }
 
-    function toArray(mixed $value): array
+    /**
+     * Get object serializer
+     * @return Serializer
+     */
+    public static function getDeserializer(): Serializer
     {
-        $arr = (array)$value;
-        foreach ($arr as $key => $v) {
-            if (is_object($v)) {
-                $arr[$key] = (array)$v;
-            }
-        }
-        return $arr;
+        $encoder = [new JsonEncoder()];
+        $extractor = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
+        $normalizer = [new ArrayDenormalizer(), new ObjectNormalizer(null, null, null, $extractor)];
+        return new Serializer($normalizer, $encoder);
     }
 }

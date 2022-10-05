@@ -11,7 +11,8 @@ class SpPaymentDebtorInformation
     public string $phone;
     public string $customerReferenceId;
 
-    function __construct(string $Fullname, string $Email, string $Phone, string $CustomerReferenceId) {
+    function __construct(string $Fullname, string $Email, string $Phone, string $CustomerReferenceId)
+    {
         $this->fullname = $Fullname;
         $this->email = $Email;
         $this->phone = $Phone;
@@ -81,5 +82,5 @@ class SpPaymentDebtorInformation
     {
         $this->customerReferenceId = $customerReferenceId;
     }
-    
+
 }
