@@ -1,42 +1,57 @@
 {
-    "name": "sdk/php-sdk",
-    "description": "Composer php sdk",
-    "type": "library",
-    "authors": [
-        {
-            "name": "bty",
-            "email": "ybentaher@tryspare.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "php": "^8.0.7",
-        "php-http/curl-client": "^2.0@dev",
-        "react/promise": "^2.8",
-        "mashape/unirest-php": "dev-master",
-        "guzzlehttp/guzzle": "^7.4@dev",
-        "jms/serializer": "^3.12@dev",
-        "starkbank/ecdsa": "dev-master",
-        "querdos/php-ecdh": "dev-master",
-        "simplito/elliptic-php": "1.0.7",
-        "symfony/serializer": "6.0.x-dev",
-        "symfony/property-access": "6.0.x-dev",
-        "paragonie/easy-ecc": "dev-master",
-        "phpunit/phpunit": "10.0.x-dev",
-        "halaxa/json-machine": "dev-master",
-        "fzaninotto/faker": "1.9.x-dev"
+  "name": "spare/php-sdk",
+  "homepage": "https://github.com/spare-technologies/php-sdk",
+  "description": "Spare payment sdk",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Hasni Mehdi",
+      "email": "hmehdi@tryspare.com"
     },
-    "config": {
-        "preferred-install": "dist",
-        "platform": {
-            "php": "8.1.2"
-        }
-    },
-    "autoload": {
-        "psr-0": {
-            "Helpers": "src/",
-            "Payment": "src/",
-            "test": "src/"
-        }
+    {
+      "name": "Yassin Ben Taher",
+      "email": "ybentaher@tryspare.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": "^7.4  || ^8.0",
+    "php-http/curl-client": "2.*",
+    "symfony/property-access": "5.*",
+    "phpdocumentor/reflection-docblock": "5.*",
+    "guzzlehttp/guzzle": "^7.4@dev",
+    "starkbank/ecdsa": "dev-master",
+    "querdos/php-ecdh": "dev-master",
+    "simplito/elliptic-php": "1.0.7",
+    "symfony/serializer": "5.*",
+    "paragonie/easy-ecc": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "9.*",
+    "fzaninotto/faker": "1.9.x-dev"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.4.3"
+    }
+  },
+  "autoload": {
+    "psr-0": {
+      "Helpers": "src/",
+      "Payment": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-0": {
+      "test": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.x-dev"
+    }
+  }
 }
