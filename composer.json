@@ -15,18 +15,17 @@
       "email": "ybentaher@tryspare.com"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "php": "^7.4  || ^8.0",
     "php-http/curl-client": "2.*",
     "symfony/property-access": "5.*",
     "phpdocumentor/reflection-docblock": "5.*",
-    "guzzlehttp/guzzle": "^7.4@dev",
-    "starkbank/ecdsa": "dev-master",
-    "querdos/php-ecdh": "dev-master",
+    "guzzlehttp/guzzle": "^7.4",
+    "starkbank/ecdsa": "^2.0",
+    "querdos/php-ecdh": "v1",
     "simplito/elliptic-php": "1.0.7",
     "symfony/serializer": "5.*",
-    "paragonie/easy-ecc": "dev-master"
+    "paragonie/easy-ecc": "v1.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",
@@ -47,11 +46,6 @@
   "autoload-dev": {
     "psr-0": {
       "test": "src/"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.x-dev"
     }
   }
 }
