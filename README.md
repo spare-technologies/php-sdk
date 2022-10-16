@@ -4,7 +4,7 @@
 #### I- Installation
 
 ```bash
-composer require spare-technologies/php-sdk
+composer require spare-technologies/php-sdk "dev-master"
 ``` 
 
 #### II- To Generate ECC key pair
