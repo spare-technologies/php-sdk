@@ -5,6 +5,7 @@
   "type": "library",
   "license": "MIT",
   "version": "1.0.1",
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Hasni Mehdi",
