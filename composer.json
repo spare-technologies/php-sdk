@@ -5,7 +5,6 @@
   "type": "library",
   "license": "MIT",
   "version": "1.0.1",
-  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Hasni Mehdi",
@@ -17,36 +16,26 @@
     }
   ],
   "require": {
-    "php": "^7.4  || ^8.0",
-    "php-http/curl-client": "2.*",
+    "php": ">=7.4",
     "symfony/property-access": "5.*",
     "phpdocumentor/reflection-docblock": "5.*",
     "guzzlehttp/guzzle": "^7.4",
-    "starkbank/ecdsa": "^2.0",
-    "querdos/php-ecdh": "v1",
-    "simplito/elliptic-php": "1.0.7",
     "symfony/serializer": "5.*",
-    "paragonie/easy-ecc": "v1.0.0"
+    "phpseclib/phpseclib": "~3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "9.*",
     "fzaninotto/faker": "1.9.x-dev"
   },
-  "config": {
-    "preferred-install": "dist",
-    "platform": {
-      "php": "7.4.3"
-    }
-  },
   "autoload": {
-    "psr-0": {
-      "Helpers": "src/",
-      "Payment": "src/"
+    "psr-4": {
+      "Helpers\\": "src/Helpers/",
+      "Payment\\": "src/Payment/"
     }
   },
   "autoload-dev": {
-    "psr-0": {
-      "test": "src/"
+    "psr-4": {
+      "test\\": "src/test"
     }
   }
 }

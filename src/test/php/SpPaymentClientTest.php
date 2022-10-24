@@ -35,6 +35,7 @@ class SpPaymentClientTest extends TestCase
      * Create domestic payment test
      * @throws GuzzleException
      * @throws SpPaymentSdkException
+     * @throws \Exception
      */
     public function testCreateDomesticPayment()
     {
@@ -89,6 +90,7 @@ class SpPaymentClientTest extends TestCase
      * Create domestic payment with customer information
      * @throws GuzzleException
      * @throws SpPaymentSdkException
+     * @throws \Exception
      */
     public function testCreateDomesticPaymentWithCustomerInformation()
     {
@@ -219,7 +221,7 @@ class SpPaymentClientTest extends TestCase
 
     private function LoadTestEnvironment(): void
     {
-        $jsonTestEnvironment = file_get_contents('../resources/testEnvironment.json');
+        $jsonTestEnvironment = file_get_contents(dirname(__FILE__, 2) . '/resources/testEnvironment.json');
         $this->testEnvironment = SpSerializer::getDeserializer()->deserialize($jsonTestEnvironment, SpTestEnvironment::class, 'json');
 
         $this->assertNotNull($this->testEnvironment);

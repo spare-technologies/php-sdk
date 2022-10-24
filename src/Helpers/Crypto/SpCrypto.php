@@ -2,7 +2,7 @@
 
 namespace Helpers\Crypto;
 
-use EllipticCurve\PrivateKey;
+use phpseclib3\Crypt\EC;
 
 class SpCrypto
 {
@@ -12,9 +12,8 @@ class SpCrypto
      */
     public static function GenerateKeyPair(): SpEcKeyPair
     {
-        $prKey = new PrivateKey("secp256k1");
-        $pbKey = $prKey->publicKey();
-        return new SpEcKeyPair($prKey->toPem(), $pbKey->toPem());
+        $private = EC::createKey('prime256v1');
+        return new SpEcKeyPair($private->toString("PKCS8"), $private->getPublicKey()->toString("PKCS8"));
     }
 
 }

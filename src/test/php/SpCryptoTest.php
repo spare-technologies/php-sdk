@@ -3,6 +3,7 @@
 namespace test\php;
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
+use Exception;
 use Faker;
 use Helpers\Crypto\SpCrypto;
 use Helpers\Security\DigitalSignature\EccSignatureManager;
@@ -26,6 +27,7 @@ class SpCryptoTest extends TestCase
 
     /**
      * Sign and verify object test
+     * @throws Exception
      */
     public function testSignAndVerify()
     {
@@ -44,7 +46,7 @@ class SpCryptoTest extends TestCase
 
         $keys = SpCrypto::GenerateKeyPair();
 
-        $signature = EccSignatureManager::Sign($payment->toJonsString(), $keys->privateKey);
+        $signature = EccSignatureManager::Sign($payment->toJonsString(), $keys->getPrivateKey());
 
         $this->assertNotEmpty($signature);
 

@@ -4,17 +4,22 @@
 namespace Payment\Client;
 
 
+use Payment\Client\Net\SpProxy;
+
 class SpPaymentClientOptions
 {
     public string $baseUrl;
     public string $appId;
     public string $appKey;
 
+    public ?SpProxy $proxy;
+
     function __construct(string $BaseUrl, string $appId, string $appKey)
     {
         $this->baseUrl = $BaseUrl;
         $this->appId = $appId;
         $this->appKey = $appKey;
+        $this->setProxy(null);
     }
 
     /**
@@ -63,6 +68,24 @@ class SpPaymentClientOptions
     public function setAppKey(string $appKey): void
     {
         $this->appKey = $appKey;
+    }
+
+    /**
+     * Get proxy
+     * @return SpProxy|null
+     */
+    public function getProxy(): ?SpProxy
+    {
+        return $this->proxy;
+    }
+
+    /**
+     * Set proxy
+     * @param SpProxy|null $proxy
+     */
+    public function setProxy(?SpProxy $proxy): void
+    {
+        $this->proxy = $proxy;
     }
 
 }
