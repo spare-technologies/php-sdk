@@ -22,6 +22,7 @@ class SpCryptoTest extends TestCase
         $this->assertNotNull($keys);
         $this->assertNotEmpty($keys->getPrivateKey());
         $this->assertNotEmpty($keys->getPublicKey());
+        echo $keys->getPrivateKey();
         putenv("keys=ali");
     }
 

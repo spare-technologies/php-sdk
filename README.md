@@ -4,9 +4,14 @@
 #### I- Installation
 
 ```bash
-composer require spare-technologies/php-sdk "dev-master"
+composer require spare-technologies/php-sdk "^1.1"
 ``` 
 
+Include these files in your application and do this at the top of your file:
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+```
 #### II- To Generate ECC key pair
 
 ```php
@@ -15,9 +20,9 @@ use Helpers\Crypto\SpCrypto;
 public class MyClass {
     $keys = SpCrypto::GenerateKeyPair();
     
-    printf("Private key \n", $keys->getPrivateKey())
-    printf("\n\n");
-    printf("Private key \n", $keys->getPublicKey());
+    echo "Private key \n" . nl2br($keys->getPrivateKey());
+    echo "\n\n";
+    echo "Public key \n" . nl2br($keys->getPublicKey())
 }
 ```
 
