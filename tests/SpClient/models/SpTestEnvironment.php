@@ -1,8 +1,6 @@
 <?php
 
-namespace test\php\models;
-
-use Helpers\Crypto\SpEcKeyPair;
+namespace SpClient\models;
 
 class SpTestEnvironment
 {
@@ -12,5 +10,5 @@ class SpTestEnvironment
     public string $apiKey;
     public string $appId;
     public ?SpTestEcKeypair $ecKeypair;
-    //public ?SpTestProxy $proxy;
+    public ?SpTestProxy $proxy;
 }

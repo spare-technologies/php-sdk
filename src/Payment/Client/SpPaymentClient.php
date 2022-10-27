@@ -7,15 +7,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use Helpers\Serialization\SpSerializer;
-use Payment\Client\Net\SpProxy;
 use Payment\Models\Payment\Domestic\SpCreateDomesticPaymentResponse;
 use Payment\Models\Payment\Domestic\SpPaymentRequest;
 use Payment\Models\Payment\Domestic\SpPaymentResponse;
 use Payment\Models\Response\SpSdkPaymentResponse;
 use Payment\Models\Response\SpSdkPaymentsResponse;
-
-
-require_once __DIR__ . '/../../../vendor/autoload.php';
 
 class SpPaymentClient implements ISpPaymentClient
 {
@@ -37,12 +33,15 @@ class SpPaymentClient implements ISpPaymentClient
      */
     public function CreateDomesticPayment(SpPaymentRequest $payment, string $signature): SpCreateDomesticPaymentResponse
     {
-        $client = new Client();
+        $client = new Client([
+            'timeout' => 10.0,
+            'proxy' => $this->GetProxy(),
+        ]);
 
         $request = new Request('POST', $this->buildUrl(SpEndPoints::$CreateDomesticPayment),
             $this->GetHeaders($signature), $payment->toJonsString());
 
-        $response = $client->send($request, $this->GetProxy($this->clientOptions->getProxy()));
+        $response = $client->send($request);
 
         if ($response->getStatusCode() != 200) {
             throw new SpPaymentSdkException($response->getBody());
@@ -62,11 +61,14 @@ class SpPaymentClient implements ISpPaymentClient
      */
     public function GetDomesticPayment(string $id): SpPaymentResponse
     {
-        $client = new Client();
+        $client = new Client([
+            'timeout' => 10.0,
+            'proxy' => $this->GetProxy(),
+        ]);
 
         $request = new Request('GET', "{$this->buildUrl(SpEndPoints::$GetDomesticPayment)}?id=$id", $this->GetHeaders());
 
-        $response = $client->send($request, $this->GetProxy($this->clientOptions->getProxy()));
+        $response = $client->send($request);
 
         if ($response->getStatusCode() != 200) {
             throw new SpPaymentSdkException($response->getBody());
@@ -87,10 +89,14 @@ class SpPaymentClient implements ISpPaymentClient
      */
     public function ListDomesticPayment(int $start, int $perPage): array
     {
-        $client = new Client();
+        $client = new Client([
+            'timeout' => 10.0,
+            'proxy' => $this->GetProxy(),
+        ]);
+
         $request = new Request('GET', "{$this->buildUrl(SpEndPoints::$ListDomesticPayment)}?start=$start&perPage=$perPage", $this->GetHeaders());
 
-        $response = $client->send($request, $this->GetProxy($this->clientOptions->getProxy()));
+        $response = $client->send($request);
 
         if ($response->getStatusCode() != 200) {
             throw new SpPaymentSdkException($response->getBody());
@@ -129,13 +135,14 @@ class SpPaymentClient implements ISpPaymentClient
 
     /**
      * Build proxy
-     * @param SpProxy|null $proxy
-     * @return array[]|string[][]
+     * @return string|null
      */
-    private function GetProxy(?SpProxy $proxy): array
+    private function GetProxy(): ?string
     {
+        $proxy = $this->clientOptions->getProxy();
+
         if ($proxy == null || $proxy->getHost() == null) {
-            return ['proxy' => []];
+            return null;
         }
 
         $url = $proxy->getHost();
@@ -145,9 +152,9 @@ class SpPaymentClient implements ISpPaymentClient
         }
 
         if ($proxy->getUsername() != null && $proxy->getPassword() != null) {
-            return ['proxy' => [$proxy->getType() => $proxy->getType() . '://' . $proxy->getUsername() . ':' . $proxy->getPassword() . '@' . $url]];
+            return $proxy->getType() . '://' . $proxy->getUsername() . ':' . $proxy->getPassword() . '@' . $url;
         }
 
-        return ['proxy' => [$proxy->getType() => $proxy->getType() . '://' . $url]];
+        return $proxy->getType() . '://' . $url;
     }
 }

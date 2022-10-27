@@ -1,34 +1,47 @@
 <?php
 
-namespace test\php;
-require_once __DIR__ . '/../../../vendor/autoload.php';
+namespace SpClient;
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Faker;
 use GuzzleHttp\Exception\GuzzleException;
 use Helpers\Security\DigitalSignature\EccSignatureManager;
 use Helpers\Serialization\SpSerializer;
+use Payment\Client\Net\SpProxy;
+use SpClient\models\SpTestEnvironment;
 use Payment\Client\SpPaymentClient;
 use Payment\Client\SpPaymentClientOptions;
 use Payment\Client\SpPaymentSdkException;
 use Payment\Models\Payment\Domestic\SpCustomerInformation;
 use Payment\Models\Payment\Domestic\SpPaymentRequest;
 use PHPUnit\Framework\TestCase;
-use test\php\models\SpTestEnvironment;
 
 class SpPaymentClientTest extends TestCase
 {
     private SpPaymentClient $paymentClient;
     private SpTestEnvironment $testEnvironment;
 
+    /**
+     * @throws SpPaymentSdkException
+     */
     protected function setUp(): void
     {
         $this->LoadTestEnvironment();
 
-        $this->paymentClient = new SpPaymentClient(
-            new SpPaymentClientOptions($this->testEnvironment->baseUrl,
-                $this->testEnvironment->appId,
-                $this->testEnvironment->apiKey)
-        );
+        $opt = new SpPaymentClientOptions($this->testEnvironment->baseUrl,
+            $this->testEnvironment->appId,
+            $this->testEnvironment->apiKey);
+
+        if ($this->testEnvironment->proxy != null) {
+            $opt->proxy = new SpProxy();
+            $opt->proxy->setHost($this->testEnvironment->proxy->getHost());
+            $opt->proxy->setPort($this->testEnvironment->proxy->getPort());
+            $opt->proxy->setType("http");
+            $opt->proxy->setUsername($this->testEnvironment->proxy->getUsername());
+            $opt->proxy->setPassword($this->testEnvironment->proxy->getPassword());
+        }
+
+        $this->paymentClient = new SpPaymentClient($opt);
     }
 
     /**
@@ -222,6 +235,7 @@ class SpPaymentClientTest extends TestCase
     private function LoadTestEnvironment(): void
     {
         $jsonTestEnvironment = file_get_contents(dirname(__FILE__, 2) . '/resources/testEnvironment.json');
+
         $this->testEnvironment = SpSerializer::getDeserializer()->deserialize($jsonTestEnvironment, SpTestEnvironment::class, 'json');
 
         $this->assertNotNull($this->testEnvironment);

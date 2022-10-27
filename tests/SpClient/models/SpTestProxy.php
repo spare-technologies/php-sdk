@@ -1,6 +1,6 @@
 <?php
 
-namespace test\php\models;
+namespace SpClient\models;
 
 class SpTestProxy
 {

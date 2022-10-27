@@ -1,7 +1,7 @@
 <?php
 
-namespace test\php;
-require_once __DIR__ . '/../../../vendor/autoload.php';
+namespace SpClient;
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Exception;
 use Faker;
@@ -22,7 +22,6 @@ class SpCryptoTest extends TestCase
         $this->assertNotNull($keys);
         $this->assertNotEmpty($keys->getPrivateKey());
         $this->assertNotEmpty($keys->getPublicKey());
-        echo $keys->getPrivateKey();
         putenv("keys=ali");
     }
 
