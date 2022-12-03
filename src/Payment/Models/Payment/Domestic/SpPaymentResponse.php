@@ -23,6 +23,7 @@ final class SpPaymentResponse extends SpDomesticPayment
     public SpPaymentUserAccount $debtor;
     public string $link;
     public string $createdAt;
+    public string $status;
 
     /**
      * @param string $id
@@ -175,5 +176,21 @@ final class SpPaymentResponse extends SpDomesticPayment
     public function getCreatedAt(): string
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 }

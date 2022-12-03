@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Helpers\Security\DigitalSignature\EccSignatureManager;
 use Helpers\Serialization\SpSerializer;
 use Payment\Client\Net\SpProxy;
+use Payment\Enum\SpPaymentStatus;
 use SpClient\models\SpTestEnvironment;
 use Payment\Client\SpPaymentClient;
 use Payment\Client\SpPaymentClientOptions;
@@ -94,6 +95,11 @@ class SpPaymentClientTest extends TestCase
 
         $this->assertNotNull($paymentResponse->getPayment()->getDescription());
         $this->assertNotEmpty($paymentResponse->getPayment()->getDescription());
+
+        $this->assertNotNull($paymentResponse->getPayment()->getStatus());
+        $this->assertNotEmpty($paymentResponse->getPayment()->getStatus());
+
+        $this->assertEquals(SpPaymentStatus::AwaitingAuthorization, $paymentResponse->getPayment()->getStatus());
 
         putenv("paymentId={$paymentResponse->getPayment()->getId()}");
 
